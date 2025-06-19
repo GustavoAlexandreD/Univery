@@ -1,0 +1,57 @@
+Comandos:
+    front:
+        inicio:
+            npx create-expo-app univery -- template blank 
+            cd univery
+            npm i
+        navegação:
+            npx expo install @react-navigation/native
+            npx expo install react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated react-native-vector-icons
+            npx expo install @react-navigation/native-stack
+            npx expo install @react-navigation/bottom-tabs
+            npx expo install @react-navigation/drawer
+            npx expo install @react-native-masked-view/masked-view
+            npx expo install react-native-pager-view
+            npx expo install react-native-svg
+        estilização:
+            npm install styled-components --legacy-peer-deps       #deu erro   
+            npx expo install native-base                           #deu erro
+            npx expo install react-native-paper
+            npm install nativewind tailwindcss
+            npx tailwindcss init
+        outros:
+            npm install axios                                      #Usado para fazer requisições HTTP (ex: enviar dados para API).
+            npm install react-hook-form                            #Gerenciar formulários
+            npm install yup                                        #Usado para validação dos dados do formulário.
+    back:   
+        inicio: 
+            npm init -y
+            npm i 
+        middleware e segurança:
+            npm install cors
+            npm install dotenv
+            npm install jsonwebtoken
+        Banco De Dados: 
+            npm i sequelize 
+            npm i pg pg-hstore
+        outros:
+            npm install express                                    #Framework para criar servidor HTTP e APIs
+            npm install --save-dev nodemon                         #Ferramenta para reiniciar automaticamente o servidor Node.js quando você faz alterações no código.
+
+
+import styled from 'styled-components/native';
+import { Text, View } from 'react-native';
+
+
+
+
+
+O QUE VC DEVE FAZER:
+    -AO CLONAR MEU REPOSITÓRIO E ESTIVER SE PREPARANDO PARA DESENVOLVER APENAS FAÇA ISSO
+        1. Crie dois terminais GIT BASH, um para o front e outro para o back ( vc pode até renomea-los para n confundir(recomendo))
+        2. Em cada terminal navegue para a sua pasta específica com os comandos : cd front-end   e   cd back-end   no seu respectivo terminal.
+        3. Após isso digite o comando npm install em cada terminal.
+        4. Pronto, pode começar o desenvolvimento.
+   
+   -SE VC AINDA N BAIXOU O NODE.JS OU O POSTGRESS ,ETC, BAIXE IMEDIATAMENTE KKKKKK   
+
