@@ -55,3 +55,11 @@ O QUE VC DEVE FAZER:
    
    -SE VC AINDA N BAIXOU O NODE.JS OU O POSTGRESS ,ETC, BAIXE IMEDIATAMENTE KKKKKK   
 
+
+comandos git: 
+
+git init
+git remote add origin ...
+git add . 
+git commit -m 
+git push -u origin main
