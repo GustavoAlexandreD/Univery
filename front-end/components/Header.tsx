@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/logo.png')} // coloque sua logo aqui
+        source={require('../../assets/Uece_icone.png')} // coloque sua logo aqui
         style={styles.logo}
         resizeMode="contain"
       />
