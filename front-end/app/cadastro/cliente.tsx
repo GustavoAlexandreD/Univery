@@ -6,7 +6,7 @@ export default function CadastroCliente() {
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState(''); 
 
   return (
     <View style={styles.container}>
