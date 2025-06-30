@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Header from '@/components/Header';
 
 export default function CadastroRestaurante() {
   const [nome, setNome] = useState('');
@@ -11,6 +12,7 @@ export default function CadastroRestaurante() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <TouchableOpacity style={styles.backButton}>
         <Text style={{ fontSize: 22, color: '#2CA94F' }}>{'←'}</Text>
       </TouchableOpacity>

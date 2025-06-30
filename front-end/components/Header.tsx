@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/Uece_icone.png')} // coloque sua logo aqui
+        source={require('../assets/images/UECE_icone.png')} // coloque sua logo aqui
         style={styles.logo}
         resizeMode="contain"
       />
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 50,
+    paddingTop: 55,
     paddingBottom: 16,
   },
   logo: {
