@@ -17,7 +17,7 @@ export default function LoginScreen() {
       {/* Logo sobre o fundo verde */}
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/images/UECE_icone.png')}
+          source={require('@/assets/images/UECE_icone.png')}
           style={styles.logo}
           resizeMode="contain"
         />
