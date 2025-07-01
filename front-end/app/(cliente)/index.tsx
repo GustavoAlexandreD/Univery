@@ -7,7 +7,8 @@ import {
   TouchableOpacity, 
   SafeAreaView,
   Image,
-  Dimensions
+  Dimensions,
+  Modal
 } from 'react-native';
 import { ArrowLeft, MapPin, Search } from 'lucide-react-native';
 
@@ -22,9 +23,18 @@ const deliveryLocations = [
 
 export default function ClienteDeliveryLocationScreen() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar o modal
 
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocation(locationId);
+  };
+
+  const openModal = () => {
+    setIsModalVisible(true); // Abre o modal
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false); // Fecha o modal
   };
 
   return (
@@ -50,29 +60,14 @@ export default function ClienteDeliveryLocationScreen() {
         <View style={styles.mapContainer}>
           <View style={styles.mapPlaceholder}>
             <Image
-              source={{ uri: 'https://images.pexels.com/photos/2850287/pexels-photo-2850287.jpeg?auto=compress&cs=tinysrgb&w=800' }}
+              source={ require('@/assets/images/Mapa UECEfood.png') }
               style={styles.mapImage}
               resizeMode="cover"
             />
-            <View style={styles.mapOverlay}>
-              {/* Location Pins */}
-              <View style={[styles.locationPin, { top: '20%', left: '25%' }]}>
-                <MapPin size={16} color="#4ADE80" />
-              </View>
-              <View style={[styles.locationPin, { top: '35%', right: '30%' }]}>
-                <MapPin size={16} color="#4ADE80" />
-              </View>
-              <View style={[styles.locationPin, { bottom: '25%', left: '20%' }]}>
-                <MapPin size={16} color="#4ADE80" />
-              </View>
-              <View style={[styles.locationPin, { bottom: '30%', right: '25%' }]}>
-                <MapPin size={16} color="#4ADE80" />
-              </View>
-            </View>
           </View>
-          <Text style={styles.mapInstruction}>
-            CLIQUE PARA NAVEGAR E{'\n'}PROCURAR O LOCAL DE ENTREGA
-          </Text>
+          <TouchableOpacity style={styles.zoomButton} onPress={openModal}>
+            <Text style={styles.zoomButtonText}>Ampliar Mapa</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Location List Header */}
@@ -85,17 +80,17 @@ export default function ClienteDeliveryLocationScreen() {
           {deliveryLocations.map((location) => (
             <TouchableOpacity
               key={location.id}
-              style={[
+              style={[ 
                 styles.locationItem,
-                selectedLocation === location.id && styles.selectedLocationItem
+                selectedLocation === location.id && styles.selectedLocationItem 
               ]}
               onPress={() => handleLocationSelect(location.id)}
               activeOpacity={0.7}
             >
               <View style={styles.locationInfo}>
-                <Text style={[
-                  styles.locationName,
-                  selectedLocation === location.id && styles.selectedLocationName
+                <Text style={[ 
+                  styles.locationName, 
+                  selectedLocation === location.id && styles.selectedLocationName 
                 ]}>
                   {location.name}
                 </Text>
@@ -103,9 +98,9 @@ export default function ClienteDeliveryLocationScreen() {
                   {location.description}
                 </Text>
               </View>
-              <View style={[
-                styles.locationIcon,
-                selectedLocation === location.id && styles.selectedLocationIcon
+              <View style={[ 
+                styles.locationIcon, 
+                selectedLocation === location.id && styles.selectedLocationIcon 
               ]}>
                 <Search size={20} color={selectedLocation === location.id ? '#4ADE80' : '#9CA3AF'} />
               </View>
@@ -116,6 +111,30 @@ export default function ClienteDeliveryLocationScreen() {
         {/* Bottom Spacing */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
+
+      {/* Modal for Enlarged Map */}
+        <Modal
+          visible={isModalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.modalContainer}>
+              <TouchableOpacity 
+                onPress={closeModal} 
+                style={[styles.closeButton, { zIndex: 10 }]} // Garantindo que o botão 'X' fique acima de outros componentes
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <Image
+                source={require('@/assets/images/Mapa UECEfood.png')}
+                style={styles.modalImage}
+                resizeMode="contain"
+              />
+            </View>
+          </View>
+        </Modal>
     </SafeAreaView>
   );
 }
@@ -184,24 +203,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  mapOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  locationPin: {
-    position: 'absolute',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
   mapInstruction: {
     fontSize: 12,
     color: '#4ADE80',
@@ -209,6 +210,19 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontWeight: '500',
     lineHeight: 16,
+  },
+  zoomButton: {
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#4ADE80',
+    borderRadius: 8,
+    alignSelf: 'center',
+  },
+  zoomButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
   listHeader: {
     paddingHorizontal: 20,
@@ -270,5 +284,37 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 20,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    zIndex: 5, // Adicionando zIndex aqui também
+  },
+  modalContainer: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 10,
+    alignItems: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: '#4ADE80',
+    padding: 10,
+    borderRadius: 20,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  modalImage: {
+    width: '100%',
+    height: '100%',
   },
 });
