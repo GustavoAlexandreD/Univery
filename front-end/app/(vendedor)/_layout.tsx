@@ -1,12 +1,12 @@
 import { Tabs } from 'expo-router';
-import { FileText, Utensils, User } from 'lucide-react-native';
+import { ChefHat, ClipboardList, Building2 } from 'lucide-react-native';
 
-export default function TabLayout() {
+export default function VendedorTabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4ADE80',
+        tabBarActiveTintColor: '#F59E0B',
         tabBarInactiveTintColor: '#9CA3AF',
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
@@ -25,9 +25,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Locais',
+          title: 'Painel',
           tabBarIcon: ({ size, color }) => (
-            <FileText size={size} color={color} />
+            <ChefHat size={size} color={color} />
           ),
         }}
       />
@@ -36,16 +36,16 @@ export default function TabLayout() {
         options={{
           title: 'Pedidos',
           tabBarIcon: ({ size, color }) => (
-            <Utensils size={size} color={color} />
+            <ClipboardList size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="business"
         options={{
-          title: 'Perfil',
+          title: 'Negócio',
           tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
+            <Building2 size={size} color={color} />
           ),
         }}
       />

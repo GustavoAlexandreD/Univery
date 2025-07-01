@@ -20,7 +20,7 @@ const deliveryLocations = [
   { id: '4', name: 'Bloco R', description: 'Biblioteca - Entrada Principal' },
 ];
 
-export default function DeliveryLocationScreen() {
+export default function ClienteDeliveryLocationScreen() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
 
   const handleLocationSelect = (locationId: string) => {

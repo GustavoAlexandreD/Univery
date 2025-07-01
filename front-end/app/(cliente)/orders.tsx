@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import { Utensils } from 'lucide-react-native';
+import { ShoppingBag } from 'lucide-react-native';
 
-export default function OrdersScreen() {
+export default function ClienteOrdersScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>PEDIDOS</Text>
+        <Text style={styles.headerTitle}>MEUS PEDIDOS</Text>
       </View>
       <View style={styles.content}>
         <View style={styles.emptyState}>
-          <Utensils size={64} color="#E5E7EB" />
+          <ShoppingBag size={64} color="#E5E7EB" />
           <Text style={styles.emptyTitle}>Nenhum pedido ainda</Text>
           <Text style={styles.emptyDescription}>
             Seus pedidos aparecerão aqui quando você fizer um pedido

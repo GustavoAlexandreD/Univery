@@ -2,19 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
 
-export default function ProfileScreen() {
+export default function ClienteProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>PERFIL</Text>
+        <Text style={styles.headerTitle}>PERFIL CLIENTE</Text>
       </View>
       <View style={styles.content}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <User size={48} color="#4ADE80" />
           </View>
-          <Text style={styles.userName}>Usuário UNIVERY</Text>
-          <Text style={styles.userEmail}>usuario@univery.edu.br</Text>
+          <Text style={styles.userName}>Cliente UNIVERY</Text>
+          <Text style={styles.userEmail}>cliente@univery.edu.br</Text>
         </View>
 
         <View style={styles.menuSection}>
