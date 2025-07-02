@@ -44,6 +44,14 @@ export default function UserTypeSelection() {
       <View style={styles.content}>
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
+          <TouchableOpacity onPress={() => router.push('/item/criacaoItem')}>
+            <Text style={{color:'pink'}}>Criacao APAGAR DPS</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push('/item/edicaoItem')}>
+            <Text style={{color:'pink'}}>Edicao APAGAR DPS</Text>
+          </TouchableOpacity>
+
           <Text style={styles.welcomeTitle}>Bem-vindo ao UECERY</Text>
           <Text style={styles.welcomeSubtitle}>
             Escolha como você deseja acessar a plataforma
