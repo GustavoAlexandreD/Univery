@@ -26,7 +26,7 @@ export default function ClienteHomeScreen() {
           <Image
             source={require('@/assets/images/UECE_icone.png')}
             style={styles.logo}
-            resizeMode="cover"
+            resizeMode='contain'
           />
         </View>
         <View style={styles.titleContainer}>
@@ -65,6 +65,11 @@ export default function ClienteHomeScreen() {
               onPress={() => handleRestaurantSelect(restaurant.id)}
               activeOpacity={0.7}
             >
+              <Image
+                source={require('@/assets/images/UECE_icone.png')}
+                style={styles.restaurantImage}
+                resizeMode='contain'
+              />
               <View style={styles.restaurantInfo}>
                 <Text style={[
                   styles.restaurantName,
@@ -75,6 +80,13 @@ export default function ClienteHomeScreen() {
                 <Text style={styles.restaurantDescription}>
                   {restaurant.description}
                 </Text>
+                <View style={styles.tagContainer}>
+                  {restaurant.tags.map((tag, index) => (
+                    <View key={index} style={styles.tagBox}>
+                      <Text style={styles.tagText}>{tag}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
               <View style={[
                 styles.restaurantIcon,
@@ -85,8 +97,6 @@ export default function ClienteHomeScreen() {
             </TouchableOpacity>
           ))}
         </View>
-
-        <View style={styles.bottomSpacing} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -94,29 +104,33 @@ export default function ClienteHomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 43,
     flex: 1,
     backgroundColor: '#F9FAFB',
   },
-  header: {
+   header: {
     height: 80,
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'relative',
+  },
+  headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
-  headerIcon: {
+  headerIcon:{
+    right: 15,
     padding: 8,
   },
   logoContainer: {
+    left: 15,
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 20,
     overflow: 'hidden',
   },
   logo: {
@@ -124,41 +138,61 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   titleContainer: {
-    flex: 1,
-    alignItems: 'center',
+  flex: 1,
+  alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: '',
     letterSpacing: 1,
   },
   content: {
     flex: 1,
   },
-  sectionHeader: {
+  sectionHeader:{
     alignItems: 'center',
   },
-  sectionTitle: {
+  sectionTitle:{
     paddingVertical: 20,
     fontSize: 18,
     fontWeight: '700',
-    color: '#4ADE80',
+    color: '#24a637',
+    fontFamily: '',
+    letterSpacing: 1,
+  },
+  listFilters:{
+    height: 40, 
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'relative',
+  },
+  filterButton:{
+    alignItems: 'center',
+    backgroundColor:'#24a637',
+  },
+  filterButtonText:{
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    fontFamily: '',
     letterSpacing: 1,
   },
   gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: 8, 
+  paddingHorizontal: 16,
+  paddingTop: 12,
   },
   gridButton: {
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#4ADE80',
-    borderRadius: 20,
+    backgroundColor: '#24a637',
+    borderRadius: 5,
     margin: 4,
   },
   gridButtonText: {
@@ -167,7 +201,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
-  restaurantList: {
+
+ restaurantList: {
     paddingTop: 20,
     paddingHorizontal: 20,
   },
@@ -177,15 +212,10 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 12,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderWidth: 2,
     borderColor: 'transparent',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
   },
   selectedRestaurantItem: {
     borderColor: '#4ADE80',
@@ -193,6 +223,14 @@ const styles = StyleSheet.create({
   },
   restaurantInfo: {
     flex: 1,
+  },
+  restaurantImage:{
+    width: 75,
+    height: 75,
+    borderRadius: 100,
+    marginRight: 12,
+    borderWidth: 2,
+    borderColor: '#737373',
   },
   restaurantName: {
     fontSize: 18,
@@ -216,7 +254,25 @@ const styles = StyleSheet.create({
   selectedRestaurantIcon: {
     backgroundColor: '#DCFCE7',
   },
-  bottomSpacing: {
-    height: 20,
+  tagContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginTop: 8,
+  gap: 4, 
+  },
+
+  tagBox: {
+  backgroundColor: '#3cb378',
+  paddingHorizontal: 10,
+  paddingVertical: 4,
+  borderRadius: 2,
+  marginRight: 4,
+  marginBottom: 4,
+  },
+
+  tagText: {
+  color: '#FFFFFF',
+  fontSize: 10,
+  fontWeight: '700',
   },
 });

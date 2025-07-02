@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { MapPin, ShoppingBag, User, } from 'lucide-react-native';
+import { Home, ShoppingBag, User, } from 'lucide-react-native';
 
 export default function ClienteTabLayout() {
   return (
@@ -26,9 +26,9 @@ export default function ClienteTabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Locais',
+          title: 'Home',
           tabBarIcon: ({ size, color }) => (
-            <MapPin size={size} color={color} />
+            <Home size={size} color={color} />
           ),
         }}
       />
@@ -45,15 +45,6 @@ export default function ClienteTabLayout() {
         name="profile"
         options={{
           title: 'Perfil',
-          tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: 'home',
           tabBarIcon: ({ size, color }) => (
             <User size={size} color={color} />
           ),
