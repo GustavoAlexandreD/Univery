@@ -53,7 +53,7 @@ export default function ClienteDeliveryLocationScreen() {
     if (location) {
       // Navigate to location details page with parameters
       router.push({
-        pathname: '/(cliente)/local/local-selecionado',
+        pathname: '/cliente/local/local-selecionado',
         params: {
           locationId: location.id,
           locationName: location.name,
