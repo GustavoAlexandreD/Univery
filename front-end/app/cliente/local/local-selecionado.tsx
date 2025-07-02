@@ -24,7 +24,8 @@ export default function LocationDetailsScreen() {
   };
 
   const handleConfirm = () => {
-    // Here you would typically save the location and delivery details
+    router.push('/(cliente)');
+    /* Here you would typically save the location and delivery details
     Alert.alert(
       'Local Confirmado',
       `Local de entrega: ${locationName}\nObservações: ${deliveryNote || 'Nenhuma'}`,
@@ -32,12 +33,12 @@ export default function LocationDetailsScreen() {
         {
           text: 'OK',
           onPress: () => {
-            // Navigate to next screen (e.g., menu or orders)
-            router.push('/(cliente)/orders');
+            // Navigate to cliente home screen
+            router.push('/(cliente)/index');
           }
         }
       ]
-    );
+    );*/
   };
 
   const openModal = () => {
@@ -70,6 +71,12 @@ export default function LocationDetailsScreen() {
               style={styles.mapImage}
               resizeMode="cover"
             />
+            <View style={styles.mapOverlay}>
+              {/* Selected Location Pin */}
+              <View style={styles.selectedLocationPin}>
+                <MapPin size={20} color="#4ADE80" />
+              </View>
+            </View>
           </View>
           <TouchableOpacity style={styles.zoomButton} onPress={openModal}>
             <Text style={styles.zoomButtonText}>Ampliar Mapa</Text>
