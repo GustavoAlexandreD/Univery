@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Image,
   TextInput,
-  Alert,
   Modal
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -24,21 +23,16 @@ export default function LocationDetailsScreen() {
   };
 
   const handleConfirm = () => {
-    router.push('/(cliente)');
-    /* Here you would typically save the location and delivery details
-    Alert.alert(
-      'Local Confirmado',
-      `Local de entrega: ${locationName}\nObservações: ${deliveryNote || 'Nenhuma'}`,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            // Navigate to cliente home screen
-            router.push('/(cliente)/index');
-          }
-        }
-      ]
-    );*/
+    // Navigate back to finalizar-pedido with location data
+    router.push({
+      pathname: '/(cliente)/cardapio/finalizar-pedido',
+      params: {
+        locationId: locationId as string,
+        locationName: locationName as string,
+        locationDescription: locationDescription as string,
+        deliveryNote: deliveryNote,
+      }
+    });
   };
 
   const openModal = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, MapPin, Plus } from 'lucide-react-native';
 
 interface CartItem {
@@ -18,6 +18,13 @@ interface CartItem {
   price: number;
   quantity: number;
   image: string;
+}
+
+interface DeliveryLocation {
+  id: string;
+  name: string;
+  description: string;
+  deliveryNote?: string;
 }
 
 const mockCartItems: CartItem[] = [
@@ -32,11 +39,29 @@ const mockCartItems: CartItem[] = [
 ];
 
 export default function FinalizarPedidoScreen() {
+  const params = useLocalSearchParams();
   const [deliveryOption, setDeliveryOption] = useState<'now' | 'later'>('now');
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
+  const [selectedLocation, setSelectedLocation] = useState<DeliveryLocation | null>(null);
+
+  // Handle location data from navigation params
+  useEffect(() => {
+    if (params.locationId && params.locationName && params.locationDescription) {
+      setSelectedLocation({
+        id: params.locationId as string,
+        name: params.locationName as string,
+        description: params.locationDescription as string,
+        deliveryNote: params.deliveryNote as string || '',
+      });
+    }
+  }, [params]);
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleSelectLocation = () => {
+    router.push('/cliente/local/local-home');
   };
 
   const removeItem = (itemId: string) => {
@@ -67,6 +92,10 @@ export default function FinalizarPedidoScreen() {
 
   const clearCart = () => {
     setCartItems([]);
+  };
+
+  const clearLocation = () => {
+    setSelectedLocation(null);
   };
 
   return (
@@ -139,15 +168,37 @@ export default function FinalizarPedidoScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Local de entrega</Text>
-            <TouchableOpacity>
-              <Text style={styles.clearButton}>Limpar</Text>
-            </TouchableOpacity>
+            {selectedLocation && (
+              <TouchableOpacity onPress={clearLocation}>
+                <Text style={styles.clearButton}>Limpar</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
-          <TouchableOpacity style={styles.locationButton}>
-            <MapPin size={20} color="#4ADE80" />
-            <Text style={styles.locationText}>Selecionar local de entrega</Text>
-          </TouchableOpacity>
+          {selectedLocation ? (
+            <View style={styles.selectedLocationContainer}>
+              <View style={styles.selectedLocationHeader}>
+                <MapPin size={20} color="#4ADE80" />
+                <View style={styles.selectedLocationInfo}>
+                  <Text style={styles.selectedLocationName}>{selectedLocation.name}</Text>
+                  <Text style={styles.selectedLocationDescription}>{selectedLocation.description}</Text>
+                  {selectedLocation.deliveryNote && (
+                    <Text style={styles.selectedLocationNote}>
+                      Observação: {selectedLocation.deliveryNote}
+                    </Text>
+                  )}
+                </View>
+              </View>
+              <TouchableOpacity style={styles.changeLocationButton} onPress={handleSelectLocation}>
+                <Text style={styles.changeLocationText}>Alterar</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.locationButton} onPress={handleSelectLocation}>
+              <MapPin size={20} color="#4ADE80" />
+              <Text style={styles.locationText}>Selecionar local de entrega</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Delivery Options Section */}
@@ -390,6 +441,50 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4ADE80',
     fontWeight: '500',
+  },
+  selectedLocationContainer: {
+    backgroundColor: '#F0FDF4',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#4ADE80',
+  },
+  selectedLocationHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  selectedLocationInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  selectedLocationName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  selectedLocationDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 4,
+  },
+  selectedLocationNote: {
+    fontSize: 12,
+    color: '#4ADE80',
+    fontStyle: 'italic',
+  },
+  changeLocationButton: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#4ADE80',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  changeLocationText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   deliveryOptions: {
     gap: 12,

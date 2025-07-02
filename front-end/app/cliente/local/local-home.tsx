@@ -26,6 +26,10 @@ export default function ClienteLocationHomeScreen() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const handleBack = () => {
+    router.back();
+  };
+
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocation(locationId);
     
@@ -57,7 +61,7 @@ export default function ClienteLocationHomeScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
           <ArrowLeft size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>UNIVERY</Text>
