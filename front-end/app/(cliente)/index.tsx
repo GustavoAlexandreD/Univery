@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, Dimensions, ScrollView } from 'react-native';
 import { Bike, Bookmark } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -16,6 +17,19 @@ export default function ClienteHomeScreen() {
   
   const handleRestaurantSelect = (restaurantId: string) => {
     setSelectedRestaurant(restaurantId);
+
+    const restaurant = restaurants.find(r => r.id === restaurantId);
+    
+    if (restaurant) {
+      // Navigate to the menu screen
+      router.push({
+        pathname: '/(cliente)/cardapio/cardapio-cliente',
+        params: {
+          restaurantId: restaurant.id,
+          restaurantName: restaurant.name,
+        }
+      });
+    }
   };
 
   return (

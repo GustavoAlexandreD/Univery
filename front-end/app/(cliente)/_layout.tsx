@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, ShoppingBag, User, } from 'lucide-react-native';
+import { MapPin, ShoppingBag, User } from 'lucide-react-native';
 
 export default function ClienteTabLayout() {
   return (
@@ -9,7 +9,6 @@ export default function ClienteTabLayout() {
         tabBarActiveTintColor: '#4ADE80',
         tabBarInactiveTintColor: '#9CA3AF',
         tabBarStyle: {
-          flex: 0.115,
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E7EB',
@@ -26,9 +25,9 @@ export default function ClienteTabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
+            <MapPin size={size} color={color} />
           ),
         }}
       />
@@ -48,6 +47,12 @@ export default function ClienteTabLayout() {
           tabBarIcon: ({ size, color }) => (
             <User size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="cardapio"
+        options={{
+          href: null, // This hides the cardapio from the tab bar
         }}
       />
     </Tabs>
