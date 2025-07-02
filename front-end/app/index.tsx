@@ -1,160 +1,230 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
-import { useRouter } from 'expo-router';
+import React from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  SafeAreaView,
+  Image,
+  Dimensions
+} from 'react-native';
+import { router } from 'expo-router';
+import { ShoppingBag, Store, Bell } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
-export default function LoginScreen() {
-  const [usuario, setUsuario] = useState('');
-  const [senha, setSenha] = useState('');
-  const router = useRouter();
+export default function UserTypeSelection() {
+  const handleClientePress = () => {
+    router.push('/(cliente)');
+  };
+
+  const handleVendedorPress = () => {
+    router.push('/(vendedor)');
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Fundo verde no topo */}
-      <View style={styles.topGreen} />
-
-      {/* Logo sobre o fundo verde */}
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../assets/images/UECE_icone.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={{ uri: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100' }}
+              style={styles.logo}
+              resizeMode="cover"
+            />
+          </View>
+          <Text style={styles.headerTitle}>UECERY</Text>
+          <TouchableOpacity style={styles.notificationButton}>
+            <Bell size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Painel branco com topo curvado */}
-      <View style={styles.curvedContent}>
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>Informe seu nome de usuário e senha da UECE</Text>
+      <View style={styles.content}>
+        {/* Welcome Section */}
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeTitle}>Bem-vindo ao UECERY</Text>
+          <Text style={styles.welcomeSubtitle}>
+            Escolha como você deseja acessar a plataforma
+          </Text>
+        </View>
 
-        <Text style={styles.label}>USUÁRIO</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ueceana@gmail.com"
-          placeholderTextColor="#888"
-          value={usuario}
-          onChangeText={setUsuario}
-        />
+        {/* User Type Cards */}
+        <View style={styles.cardContainer}>
+          <TouchableOpacity 
+            style={styles.userTypeCard}
+            onPress={handleClientePress}
+            activeOpacity={0.8}
+          >
+            <View style={styles.cardIcon}>
+              <ShoppingBag size={48} color="#4ADE80" />
+            </View>
+            <Text style={styles.cardTitle}>CLIENTE</Text>
+            <Text style={styles.cardDescription}>
+              Faça pedidos e receba suas refeições no campus
+            </Text>
+            <View style={styles.cardButton}>
+              <Text style={styles.cardButtonText}>Continuar como Cliente</Text>
+            </View>
+          </TouchableOpacity>
 
-        <Text style={styles.label}>SENHA</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="*****"
-          placeholderTextColor="#888"
-          secureTextEntry
-          value={senha}
-          onChangeText={setSenha}
-        />
+          <TouchableOpacity 
+            style={styles.userTypeCard}
+            onPress={handleVendedorPress}
+            activeOpacity={0.8}
+          >
+            <View style={styles.cardIcon}>
+              <Store size={48} color="#F59E0B" />
+            </View>
+            <Text style={styles.cardTitle}>VENDEDOR</Text>
+            <Text style={styles.cardDescription}>
+              Gerencie seu negócio e atenda pedidos
+            </Text>
+            <View style={[styles.cardButton, styles.vendorButton]}>
+              <Text style={[styles.cardButtonText, styles.vendorButtonText]}>Continuar como Vendedor</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Log in</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Text style={styles.link}>Esqueceu sua senha?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/cadastro/cliente')}>
-          <Text style={styles.link}>Cadastrar-se e peça comida já!</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/cadastro/restaurante')}>
-          <Text style={styles.link}>Cadastrar meu restaurante</Text>
-        </TouchableOpacity>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Plataforma de delivery universitária
+          </Text>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F9FAFB',
   },
-  topGreen: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 280, // altura do topo verde
-    backgroundColor: '#2CA94F',
-    zIndex: 0,
+  header: {
+    backgroundColor: '#4ADE80',
+    paddingVertical: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   logoContainer: {
-    alignItems: 'center',
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    
-    
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   logo: {
-    width: 120,
-    height: 120,
-    
+    width: '100%',
+    height: '100%',
   },
-  curvedContent: {
-    flex: 1,
-    marginTop: 200,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    paddingTop: 40,
-    zIndex: 1,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#222',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  label: {
-    alignSelf: 'flex-start',
-    fontSize: 12,
-    color: '#888',
-    marginTop: 12,
-    marginBottom: 4,
-    fontWeight: 'bold',
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
     letterSpacing: 1,
   },
-  input: {
-    width: '100%',
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: '#E5E5E5',
-    paddingHorizontal: 12,
-    fontSize: 16,
-    marginBottom: 4,
-    color: '#222',
+  notificationButton: {
+    padding: 8,
   },
-  button: {
-    width: '100%',
-    height: 44,
-    backgroundColor: '#2CA94F',
-    borderRadius: 8,
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  welcomeSection: {
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
+    paddingVertical: 40,
+  },
+  welcomeTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#1F2937',
     marginBottom: 8,
+    textAlign: 'center',
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
+  welcomeSubtitle: {
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 22,
   },
-  link: {
-    color: '#888',
+  cardContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: 24,
+  },
+  userTypeCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 32,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  cardIcon: {
+    backgroundColor: '#F0FDF4',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1F2937',
+    marginBottom: 8,
+    letterSpacing: 0.5,
+  },
+  cardDescription: {
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 24,
+  },
+  cardButton: {
+    backgroundColor: '#4ADE80',
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 12,
+    width: '100%',
+  },
+  vendorButton: {
+    backgroundColor: '#F59E0B',
+  },
+  cardButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  vendorButtonText: {
+    color: '#FFFFFF',
+  },
+  footer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  footerText: {
     fontSize: 14,
-    marginTop: 8,
+    color: '#9CA3AF',
     textAlign: 'center',
   },
 });
