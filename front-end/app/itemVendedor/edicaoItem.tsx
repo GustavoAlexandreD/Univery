@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import BackButton from '@/components/BackButton';
 import { useFonts } from '@expo-google-fonts/dm-sans';
 import { Checkbox } from 'react-native-paper'
 
 import NavegationEstablismentView from '@/components/NavegationEstablishmentView';
 import ItemEstablishmentBanner from '@/components/ItemEstablishmentBanner';
 
-export default function CadastroCliente() {
+export default function edicaoItem() {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
   const [checked, setChecked] = useState(false);
 
-  const [telefone, setTelefone] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState(''); 
   const [fontsLoaded] = useFonts({
     'DMSans-Regular': require('../../assets/fonts/DMSans-Regular.ttf'),
     'DMSans-Medium': require('../../assets/fonts/DMSans-Medium.ttf'),

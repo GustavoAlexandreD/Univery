@@ -6,15 +6,11 @@ import { useFonts } from '@expo-google-fonts/dm-sans';
 import ItemEstablishmentBanner from '@/components/ItemEstablishmentBanner';
 import NavegationEstablismentView from '@/components/NavegationEstablishmentView';
 
-export default function CadastroCliente() {
+export default function criacaoItem() {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
 
-  const [telefone, setTelefone] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState(''); 
   const [fontsLoaded] = useFonts({
     'DMSans-Regular': require('../../assets/fonts/DMSans-Regular.ttf'),
     'DMSans-Medium': require('../../assets/fonts/DMSans-Medium.ttf'),
