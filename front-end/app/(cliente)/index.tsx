@@ -11,30 +11,64 @@ import {
   Modal
 } from 'react-native';
 import { ArrowLeft, MapPin, Search } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const deliveryLocations = [
-  { id: '1', name: 'Bloco P', description: 'Prédio Principal - Térreo' },
-  { id: '2', name: 'Bloco Q', description: 'Laboratórios - 2º Andar' },
-  { id: '3', name: 'PPGCC', description: 'Pós-Graduação - Sala 101' },
-  { id: '4', name: 'Bloco R', description: 'Biblioteca - Entrada Principal' },
+  { id: '1',  name: 'Bloco A', description: 'Corredor da Biblioteca' },
+  { id: '2',  name: 'Bloco B', description: 'Corredor da Biblioteca' },
+  { id: '3',  name: 'Bloco C', description: 'Corredor da Biblioteca' },
+  { id: '4',  name: 'Bloco D', description: 'Corredor da Biblioteca' },
+  { id: '5',  name: 'Bloco E', description: 'Corredor da Biblioteca' },
+  { id: '6',  name: 'Bloco F', description: 'Corredor da Biblioteca' },
+  { id: '7',  name: 'Bloco G', description: 'Corredor Principal' },
+  { id: '8',  name: 'Bloco H', description: 'Corredor Principal' },
+  { id: '9',  name: 'Bloco I', description: 'Corredor Principal' },
+  { id: '10', name: 'Bloco J', description: 'Corredor Principal' },
+  { id: '11', name: 'Bloco K', description: 'Corredor Paralelo ao Principal' },
+  { id: '12', name: 'Bloco L', description: 'Corredor Paralelo ao Principal' },
+  { id: '13', name: 'Bloco M', description: 'Corredor Paralelo ao Principal' },
+  { id: '14', name: 'Bloco N', description: 'Corredor Paralelo ao Principal' },
+  { id: '15', name: 'Bloco O', description: 'Corredor Principal' },
+  { id: '16', name: 'Bloco P', description: 'Corredor Principal' },
+  { id: '17', name: 'Bloco Q', description: 'Corredor Principal' },
+  { id: '18', name: 'Bloco R', description: 'Biblioteca - Entrada Principal' },
+  { id: '19', name: 'Bloco S', description: 'Biblioteca - Entrada Principal' },
+  { id: '20', name: 'PPGCC',   description: 'Pós-Graduação em Informática' },
+  { id: '21', name: 'Biblioteca',   description: 'Corredor Principal' },
+  { id: '22', name: 'Centro Acadêmico (CA)',   description: 'Rua Lateral' },
 ];
 
 export default function ClienteDeliveryLocationScreen() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para controlar o modal
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocation(locationId);
+    
+    // Find the selected location details
+    const location = deliveryLocations.find(loc => loc.id === locationId);
+    
+    if (location) {
+      // Navigate to location details page with parameters
+      router.push({
+        pathname: '/(cliente)/local-selecionado',
+        params: {
+          locationId: location.id,
+          locationName: location.name,
+          locationDescription: location.description,
+        }
+      });
+    }
   };
 
   const openModal = () => {
-    setIsModalVisible(true); // Abre o modal
+    setIsModalVisible(true);
   };
 
   const closeModal = () => {
-    setIsModalVisible(false); // Fecha o modal
+    setIsModalVisible(false);
   };
 
   return (
@@ -60,7 +94,7 @@ export default function ClienteDeliveryLocationScreen() {
         <View style={styles.mapContainer}>
           <View style={styles.mapPlaceholder}>
             <Image
-              source={ require('@/assets/images/Mapa UECEfood.png') }
+              source={require('@/assets/images/Mapa UECEfood.png')}
               style={styles.mapImage}
               resizeMode="cover"
             />
@@ -80,17 +114,17 @@ export default function ClienteDeliveryLocationScreen() {
           {deliveryLocations.map((location) => (
             <TouchableOpacity
               key={location.id}
-              style={[ 
+              style={[
                 styles.locationItem,
-                selectedLocation === location.id && styles.selectedLocationItem 
+                selectedLocation === location.id && styles.selectedLocationItem
               ]}
               onPress={() => handleLocationSelect(location.id)}
               activeOpacity={0.7}
             >
               <View style={styles.locationInfo}>
-                <Text style={[ 
-                  styles.locationName, 
-                  selectedLocation === location.id && styles.selectedLocationName 
+                <Text style={[
+                  styles.locationName,
+                  selectedLocation === location.id && styles.selectedLocationName
                 ]}>
                   {location.name}
                 </Text>
@@ -98,9 +132,9 @@ export default function ClienteDeliveryLocationScreen() {
                   {location.description}
                 </Text>
               </View>
-              <View style={[ 
-                styles.locationIcon, 
-                selectedLocation === location.id && styles.selectedLocationIcon 
+              <View style={[
+                styles.locationIcon,
+                selectedLocation === location.id && styles.selectedLocationIcon
               ]}>
                 <Search size={20} color={selectedLocation === location.id ? '#4ADE80' : '#9CA3AF'} />
               </View>
@@ -113,28 +147,28 @@ export default function ClienteDeliveryLocationScreen() {
       </ScrollView>
 
       {/* Modal for Enlarged Map */}
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <TouchableOpacity 
-                onPress={closeModal} 
-                style={[styles.closeButton, { zIndex: 10 }]} // Garantindo que o botão 'X' fique acima de outros componentes
-              >
-                <Text style={styles.closeButtonText}>X</Text>
-              </TouchableOpacity>
-              <Image
-                source={require('@/assets/images/Mapa UECEfood.png')}
-                style={styles.modalImage}
-                resizeMode="contain"
-              />
-            </View>
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <TouchableOpacity 
+              onPress={closeModal} 
+              style={[styles.closeButton, { zIndex: 10 }]}
+            >
+              <Text style={styles.closeButtonText}>X</Text>
+            </TouchableOpacity>
+            <Image
+              source={require('@/assets/images/Mapa UECEfood.png')}
+              style={styles.modalImage}
+              resizeMode="contain"
+            />
           </View>
-        </Modal>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -203,26 +237,24 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  mapInstruction: {
-    fontSize: 12,
-    color: '#4ADE80',
-    textAlign: 'center',
-    marginTop: 12,
-    fontWeight: '500',
-    lineHeight: 16,
-  },
   zoomButton: {
-    marginTop: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
     backgroundColor: '#4ADE80',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 8,
     alignSelf: 'center',
+    marginTop: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   zoomButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
   listHeader: {
     paddingHorizontal: 20,
@@ -287,34 +319,42 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    zIndex: 5, // Adicionando zIndex aqui também
   },
   modalContainer: {
-    width: '90%',
+    width: '95%',
     height: '80%',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 10,
-    alignItems: 'center',
+    padding: 20,
+    position: 'relative',
   },
   closeButton: {
     position: 'absolute',
-    top: 20,
-    right: 20,
-    backgroundColor: '#4ADE80',
-    padding: 10,
+    top: 15,
+    right: 15,
+    backgroundColor: '#EF4444',
+    width: 40,
+    height: 40,
     borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   closeButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '700',
+    color: '#FFFFFF',
   },
   modalImage: {
     width: '100%',
     height: '100%',
+    borderRadius: 12,
   },
 });
