@@ -75,11 +75,12 @@ export default function UserTypeSelection() {
         </View>
 
         {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Plataforma de delivery universitária
-          </Text>
-        </View>
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Plataforma de delivery universitária
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -94,10 +95,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
+
   },
   welcomeSection: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingTop: 25,
+    height: 150
   },
   welcomeTitle: {
     fontSize: 28,
@@ -116,11 +119,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     gap: 24,
+    marginBottom: 20,
   },
   userTypeCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 32,
+    paddingVertical: 20,
     alignItems: 'center',
     elevation: 4,
     shadowColor: '#000',
@@ -132,22 +137,22 @@ const styles = StyleSheet.create({
   },
   cardIcon: {
     backgroundColor: '#F0FDF4',
-    width: 80,
-    height: 80,
+    width: 40,
+    height: 40,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },
   cardTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
     color: '#1F2937',
     marginBottom: 8,
     letterSpacing: 0.5,
   },
   cardDescription: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#6B7280',
     textAlign: 'center',
     lineHeight: 22,
@@ -173,8 +178,10 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   footer: {
-    paddingVertical: 20,
+    height: 20,
     alignItems: 'center',
+    position: 'fixed',
+    bottom: 0,
   },
   footerText: {
     fontSize: 14,
