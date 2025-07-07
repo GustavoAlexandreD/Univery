@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bike, Bookmark } from 'lucide-react-native';
 import { router } from 'expo-router';
+import Header from '@/components/Header';
+import HeaderCliente from '@/components/HeaderCliente';
 
 const { width } = Dimensions.get('window');
 
@@ -35,21 +38,7 @@ export default function ClienteHomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('@/assets/images/UECE_icone.png')}
-            style={styles.logo}
-            resizeMode='contain'
-          />
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.headerTitle}>UNIVERY</Text>
-        </View>
-        <TouchableOpacity style={styles.headerIcon}>
-          <Bike size={30} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
+      <HeaderCliente />
 
       {/* Body */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -118,49 +107,9 @@ export default function ClienteHomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 43,
     flex: 1,
     backgroundColor: '#F9FAFB',
-  },
-   header: {
-    height: 80,
-    backgroundColor: '#3cb378',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    position: 'relative',
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerIcon:{
-    right: 15,
-    padding: 8,
-  },
-  logoContainer: {
-    left: 15,
-    width: 50,
-    height: 50,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  logo: {
-    width: '100%',
-    height: '100%',
-  },
-  titleContainer: {
-  flex: 1,
-  alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    fontFamily: '',
-    letterSpacing: 1,
+    position: 'relative'
   },
   content: {
     flex: 1,

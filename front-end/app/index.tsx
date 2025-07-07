@@ -4,12 +4,13 @@ import {
   Text, 
   StyleSheet, 
   TouchableOpacity, 
-  SafeAreaView,
   Image,
   Dimensions
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ShoppingBag, Store, Bell } from 'lucide-react-native';
+import Header from '@/components/Header';
 
 const { width } = Dimensions.get('window');
 
@@ -25,21 +26,7 @@ export default function UserTypeSelection() {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.logoContainer}>
-            <Image
-              source={{ uri: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=100' }}
-              style={styles.logo}
-              resizeMode="cover"
-            />
-          </View>
-          <Text style={styles.headerTitle}>UECERY</Text>
-          <TouchableOpacity style={styles.notificationButton}>
-            <Bell size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header />
 
       <View style={styles.content}>
         {/* Welcome Section */}
@@ -102,40 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9FAFB',
-  },
-  header: {
-    backgroundColor: '#4ADE80',
-    paddingVertical: 16,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  logoContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  logo: {
-    width: '100%',
-    height: '100%',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    letterSpacing: 1,
-  },
-  notificationButton: {
-    padding: 8,
+    position: 'relative'
   },
   content: {
     flex: 1,

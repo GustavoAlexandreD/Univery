@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   iconButton: { marginHorizontal: 10, marginTop: 30, borderRadius: 3, justifyContent: 'center', paddingHorizontal: 10, backgroundColor: '#3bb17b', height: 50, width: 50},
 
 
-  button: {height: 50 ,width: 150, backgroundColor: '#3bb17b', borderRadius: 15, paddingVertical: 9, marginLeft: 30, marginTop: 30},
-  buttonText: {fontFamily: 'DMSans-Medium', fontSize:20, color: 'white', alignSelf: 'center'},
+  button: {height: 50 ,width: 150, backgroundColor: '#3bb17b', borderRadius: 15, paddingVertical: 12, marginLeft: 30, marginTop: 30},
+  buttonText: {fontFamily: 'DMSans-Medium', fontSize:19, color: 'white', alignSelf: 'center'},
   safeArea: {flex: 1, backgroundColor: '#fff', position: 'relative'},
 });

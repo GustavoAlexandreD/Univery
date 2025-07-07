@@ -2,41 +2,64 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Bike } from 'lucide-react-native';
 
 const Header = () => {
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../../assets/Uece_icone.png')} // coloque sua logo aqui
-        style={styles.logo}
-        resizeMode="contain"
-      />
-      <Text style={styles.title}>UNIVERY</Text>
-      <TouchableOpacity>
-        <Ionicons name="notifications-outline" size={24} color="#fff" />
-      </TouchableOpacity>
+    <View style={styles.header}>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('@/assets/images/UECE_icone.png')}
+          style={styles.logo}
+          resizeMode='contain'
+        />
+      </View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.headerTitle}>UNIVERY</Text>
+      </View>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#2DA54F',
+   header: {
+    height: 60,
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 50,
-    paddingBottom: 16,
+    position: 'relative',
+  },
+    headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+
+  logoContainer: {
+    left: 15,
+    width: 50,
+    height: 45,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: '100%',
+    height: '100%',
   },
-  title: {
-    fontSize: 20,
-    color: '#fff',
-    fontWeight: 'bold',
+  titleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginRight: 40
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    fontFamily: '',
+    letterSpacing: 1,
   },
 });
 
