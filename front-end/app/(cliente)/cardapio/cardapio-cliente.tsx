@@ -127,7 +127,6 @@ export default function CardapioClienteScreen() {
         </TouchableOpacity>
         <View style={styles.headerInfo}>
           <Text style={styles.headerTitle}>{restaurantName || 'UECEANA'}</Text>
-          <Text style={styles.headerSubtitle}>Come in and discover your new favorite comfort food - made just for you!</Text>
         </View>
       </View>
 
@@ -187,66 +186,58 @@ export default function CardapioClienteScreen() {
           <Text style={styles.sectionTitle}>{selectedCategory}</Text>
           
           {filteredItems.map((item) => (
-            <TouchableOpacity onPress={() => router.push("../../itemCliente/item")} >
-              <View key={item.id} style={styles.menuItem}>
+        <TouchableOpacity onPress={() => router.push("../../itemCliente/item")} >
+            <View key={item.id} style={styles.menuItemCompact}>
                 <Image
-                  source={{ uri: item.image }}
-                  style={styles.menuItemImage}
-                  resizeMode="cover"
+                    source={{ uri: item.image }}
+                    style={styles.menuItemCompactImage}
+                    resizeMode="cover"
                 />
-                <View style={styles.menuItemContent}>
-                  <View style={styles.menuItemHeader}>
+                <View style={styles.menuItemCompactContent}>
+                    <View style={styles.menuItemCompactHeader}>
                     <Text style={styles.menuItemName}>{item.name}</Text>
-                    <TouchableOpacity
-                      style={styles.favoriteButton}
-                      onPress={() => toggleFavorite(item.id)}
-                    >
-                      <Heart 
-                        size={20} 
+                    <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
+                        <Heart
+                        size={20}
                         color={favorites.has(item.id) ? "#EF4444" : "#9CA3AF"}
                         fill={favorites.has(item.id) ? "#EF4444" : "transparent"}
-                      />
+                        />
                     </TouchableOpacity>
-                  </View>
-                  
-                  <Text style={styles.menuItemDescription}>{item.description}</Text>
-                  
-                  <View style={styles.menuItemFooter}>
-                    <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
-                    
-                    <View style={styles.quantityControls}>
-                      {cart[item.id] ? (
-                        <>
-                          <TouchableOpacity
-                            style={styles.quantityButton}
-                            onPress={() => removeFromCart(item.id)}
-                          >
-                            <Minus size={16} color="#FFFFFF" />
-                          </TouchableOpacity>
-                          
-                          <Text style={styles.quantityText}>{cart[item.id]}</Text>
-                          
-                          <TouchableOpacity
-                            style={styles.quantityButton}
-                            onPress={() => addToCart(item.id)}
-                          >
-                            <Plus size={16} color="#FFFFFF" />
-                          </TouchableOpacity>
-                        </>
-                      ) : (
-                        <TouchableOpacity
-                          style={styles.addButton}
-                          onPress={() => addToCart(item.id)}
-                        >
-                          <Text style={styles.addButtonText}>Adicionar</Text>
-                        </TouchableOpacity>
-                      )}
                     </View>
-                  </View>
+                    <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+                    <Text style={styles.menuItemDescription} numberOfLines={1}>
+                    {item.description}
+                    </Text>
                 </View>
-              </View>
-            </TouchableOpacity>
 
+                <View style={styles.quantityControlsCompact}>
+                    {cart[item.id] ? (
+                    <>
+                        <TouchableOpacity
+                        style={styles.quantityButton}
+                        onPress={() => removeFromCart(item.id)}
+                        >
+                        <Minus size={16} color="#FFFFFF" />
+                        </TouchableOpacity>
+                        <Text style={styles.quantityText}>{cart[item.id]}</Text>
+                        <TouchableOpacity
+                        style={styles.quantityButton}
+                        onPress={() => addToCart(item.id)}
+                        >
+                        <Plus size={16} color="#FFFFFF" />
+                        </TouchableOpacity>
+                    </>
+                    ) : (
+                    <TouchableOpacity
+                        style={styles.addButton}
+                        onPress={() => addToCart(item.id)}
+                    >
+                        <Text style={styles.addButtonText}>Adicionar</Text>
+                    </TouchableOpacity>
+                    )}
+                </View>
+                </View>
+        </TouchableOpacity>
           ))}
         </View>
 
@@ -280,11 +271,12 @@ export default function CardapioClienteScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 43,
     flex: 1,
     backgroundColor: '#F9FAFB',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -294,6 +286,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    position: 'relative',
   },
   backButton: {
     padding: 8,
@@ -384,7 +377,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   selectedCategoryButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
   },
   categoryButtonText: {
     fontSize: 14,
@@ -454,7 +447,7 @@ const styles = StyleSheet.create({
   menuItemPrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#4ADE80',
+    color: '#24a637',
   },
   quantityControls: {
     flexDirection: 'row',
@@ -477,7 +470,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   addButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -558,4 +551,41 @@ const styles = StyleSheet.create({
   bottomSpacing: {
     height: 20,
   },
+  menuItemCompact: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#FFFFFF',
+  borderRadius: 16,
+  marginBottom: 12,
+  padding: 12,
+  elevation: 2,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  gap: 12,
+},
+menuItemCompactImage: {
+  width: 50,
+  height: 50,
+  borderRadius: 25,
+  backgroundColor: '#F3F4F6',
+},
+
+menuItemCompactContent: {
+  flex: 1,
+},
+
+menuItemCompactHeader: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+quantityControlsCompact: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+},
+
 });

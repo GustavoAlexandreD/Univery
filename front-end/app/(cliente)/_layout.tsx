@@ -1,7 +1,9 @@
 import { Tabs } from 'expo-router';
 import { MapPin, ShoppingBag, User } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ClienteTabLayout() {
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -13,8 +15,8 @@ export default function ClienteTabLayout() {
           borderTopWidth: 1,
           borderTopColor: '#E5E7EB',
           paddingTop: 8,
-          paddingBottom: 8,
-          height: 70,
+          paddingBottom: 8 + insets.bottom, // <- aqui está o truque
+          height: 70 + insets.bottom,       // ajusta a altura total
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -52,7 +54,7 @@ export default function ClienteTabLayout() {
       <Tabs.Screen
         name="cardapio"
         options={{
-          href: null, // This hides the cardapio from the tab bar
+          href: null, 
         }}
       />
     </Tabs>
