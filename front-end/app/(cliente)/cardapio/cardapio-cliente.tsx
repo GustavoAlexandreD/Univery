@@ -187,63 +187,66 @@ export default function CardapioClienteScreen() {
           <Text style={styles.sectionTitle}>{selectedCategory}</Text>
           
           {filteredItems.map((item) => (
-            <View key={item.id} style={styles.menuItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.menuItemImage}
-                resizeMode="cover"
-              />
-              <View style={styles.menuItemContent}>
-                <View style={styles.menuItemHeader}>
-                  <Text style={styles.menuItemName}>{item.name}</Text>
-                  <TouchableOpacity
-                    style={styles.favoriteButton}
-                    onPress={() => toggleFavorite(item.id)}
-                  >
-                    <Heart 
-                      size={20} 
-                      color={favorites.has(item.id) ? "#EF4444" : "#9CA3AF"}
-                      fill={favorites.has(item.id) ? "#EF4444" : "transparent"}
-                    />
-                  </TouchableOpacity>
-                </View>
-                
-                <Text style={styles.menuItemDescription}>{item.description}</Text>
-                
-                <View style={styles.menuItemFooter}>
-                  <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+            <TouchableOpacity onPress={() => router.push("../../itemCliente/item")} >
+              <View key={item.id} style={styles.menuItem}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={styles.menuItemImage}
+                  resizeMode="cover"
+                />
+                <View style={styles.menuItemContent}>
+                  <View style={styles.menuItemHeader}>
+                    <Text style={styles.menuItemName}>{item.name}</Text>
+                    <TouchableOpacity
+                      style={styles.favoriteButton}
+                      onPress={() => toggleFavorite(item.id)}
+                    >
+                      <Heart 
+                        size={20} 
+                        color={favorites.has(item.id) ? "#EF4444" : "#9CA3AF"}
+                        fill={favorites.has(item.id) ? "#EF4444" : "transparent"}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   
-                  <View style={styles.quantityControls}>
-                    {cart[item.id] ? (
-                      <>
+                  <Text style={styles.menuItemDescription}>{item.description}</Text>
+                  
+                  <View style={styles.menuItemFooter}>
+                    <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+                    
+                    <View style={styles.quantityControls}>
+                      {cart[item.id] ? (
+                        <>
+                          <TouchableOpacity
+                            style={styles.quantityButton}
+                            onPress={() => removeFromCart(item.id)}
+                          >
+                            <Minus size={16} color="#FFFFFF" />
+                          </TouchableOpacity>
+                          
+                          <Text style={styles.quantityText}>{cart[item.id]}</Text>
+                          
+                          <TouchableOpacity
+                            style={styles.quantityButton}
+                            onPress={() => addToCart(item.id)}
+                          >
+                            <Plus size={16} color="#FFFFFF" />
+                          </TouchableOpacity>
+                        </>
+                      ) : (
                         <TouchableOpacity
-                          style={styles.quantityButton}
-                          onPress={() => removeFromCart(item.id)}
-                        >
-                          <Minus size={16} color="#FFFFFF" />
-                        </TouchableOpacity>
-                        
-                        <Text style={styles.quantityText}>{cart[item.id]}</Text>
-                        
-                        <TouchableOpacity
-                          style={styles.quantityButton}
+                          style={styles.addButton}
                           onPress={() => addToCart(item.id)}
                         >
-                          <Plus size={16} color="#FFFFFF" />
+                          <Text style={styles.addButtonText}>Adicionar</Text>
                         </TouchableOpacity>
-                      </>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.addButton}
-                        onPress={() => addToCart(item.id)}
-                      >
-                        <Text style={styles.addButtonText}>Adicionar</Text>
-                      </TouchableOpacity>
-                    )}
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
+
           ))}
         </View>
 
