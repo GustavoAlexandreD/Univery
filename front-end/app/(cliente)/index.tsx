@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bike, Bookmark } from 'lucide-react-native';
 import { router } from 'expo-router';
-import Header from '@/components/Header';
 import HeaderCliente from '@/components/HeaderCliente';
 
 const { width } = Dimensions.get('window');

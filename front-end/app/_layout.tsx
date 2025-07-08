@@ -9,9 +9,10 @@ export default function RootLayout() {
   return (
     <>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(cliente)" options={{ headerShown: false }} />
-        <Stack.Screen name="(vendedor)" options={{ headerShown: false }} />
+        <Stack.Screen name="(cliente)" />
+        <Stack.Screen name="(entregador)" />
+        <Stack.Screen name="cliente/local/local-home" />
+        <Stack.Screen name="cliente/local/local-selecionado" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

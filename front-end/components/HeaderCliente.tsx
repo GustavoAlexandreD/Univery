@@ -1,15 +1,18 @@
-// components/ui/Header.tsx
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Bike } from 'lucide-react-native';
+import { router } from 'expo-router';
 import Header from './Header';
 
 const HeaderCliente = () => {
+  const handleBikePress = () => {
+    router.push('/(entregador)');
+  };
+
   return (
-    <View >
+    <View>
       <Header />
-      <TouchableOpacity style={styles.headerIcon}>
+      <TouchableOpacity style={styles.headerIcon} onPress={handleBikePress}>
         <Bike size={30} color="#FFFFFF" />
       </TouchableOpacity>      
     </View>
@@ -17,7 +20,7 @@ const HeaderCliente = () => {
 };
 
 const styles = StyleSheet.create({
-  headerIcon:{
+  headerIcon: {
     right: 15,
     padding: 8,
     top: 10,
