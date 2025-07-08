@@ -4,9 +4,9 @@ import {
   Text, 
   StyleSheet, 
   ScrollView, 
-  TouchableOpacity, 
-  SafeAreaView 
+  TouchableOpacity,  
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Clock, CircleCheck as CheckCircle, Package, CircleAlert as AlertCircle } from 'lucide-react-native';
 
 const orderStatuses = [

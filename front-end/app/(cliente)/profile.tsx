@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
 
 export default function ClienteProfileScreen() {

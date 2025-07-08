@@ -5,10 +5,10 @@ import {
   StyleSheet, 
   ScrollView, 
   TouchableOpacity, 
-  SafeAreaView,
   Image,
   TextInput
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Search, Heart, Plus, Minus, ShoppingCart } from 'lucide-react-native';
 
@@ -271,7 +271,6 @@ export default function CardapioClienteScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 43,
     flex: 1,
     backgroundColor: '#F9FAFB',
   },

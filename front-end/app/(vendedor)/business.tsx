@@ -5,8 +5,8 @@ import {
   StyleSheet, 
   ScrollView, 
   TouchableOpacity, 
-  SafeAreaView 
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Store, Clock, MapPin, Phone, Mail, Settings, ChartBar as BarChart3, Package, DollarSign, Users } from 'lucide-react-native';
 
 const businessStats = [
