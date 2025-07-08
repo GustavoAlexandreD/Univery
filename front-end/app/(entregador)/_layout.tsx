@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { FileText, Chrome as Home, Settings } from 'lucide-react-native';
+import { FileText, Home, Settings } from 'lucide-react-native';
 
 export default function EntregadorTabLayout() {
   return (
@@ -47,6 +47,12 @@ export default function EntregadorTabLayout() {
           tabBarIcon: ({ size, color }) => (
             <Settings size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="detalhes"
+        options={{
+          href: null, // This hides the detalhes from the tab bar
         }}
       />
     </Tabs>

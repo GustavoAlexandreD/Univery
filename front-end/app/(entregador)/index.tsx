@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, Phone, MapPin, Info } from 'lucide-react-native';
+import { router } from 'expo-router';
 import Header from '@/components/Header';
 
 interface Order {
@@ -42,6 +43,14 @@ export default function EntregadorHomeScreen() {
     setHasActiveOrder(!hasActiveOrder);
   };
 
+  const handleVerDetalhes = () => {
+    router.push('/(entregador)/detalhes/ver_entrega');
+  };
+
+  const handleGoToCliente = () => {
+    router.push('/(cliente)');
+  };
+
   if (hasActiveOrder) {
     return (
       <SafeAreaView style={styles.container}>
@@ -71,7 +80,7 @@ export default function EntregadorHomeScreen() {
                 </View>
               </View>
               <View style={styles.statusContainer}>
-                <TouchableOpacity style={styles.infoButton}>
+                <TouchableOpacity style={styles.infoButton} onPress={handleVerDetalhes}>
                   <Info size={20} color="#6B7280" />
                 </TouchableOpacity>
                 <View style={styles.statusBadge}>
@@ -108,6 +117,14 @@ export default function EntregadorHomeScreen() {
             <Text style={styles.testButtonText}>
               {hasActiveOrder ? 'Simular: Sem Pedidos' : 'Simular: Com Pedido'}
             </Text>
+          </TouchableOpacity>
+
+          {/* Navigation Button to Cliente */}
+          <TouchableOpacity 
+            style={styles.clienteButton} 
+            onPress={handleGoToCliente}
+          >
+            <Text style={styles.clienteButtonText}>Ir para Área do Cliente</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -150,6 +167,14 @@ export default function EntregadorHomeScreen() {
           <Text style={styles.testButtonText}>
             {hasActiveOrder ? 'Simular: Sem Pedidos' : 'Simular: Com Pedido'}
           </Text>
+        </TouchableOpacity>
+
+        {/* Navigation Button to Cliente */}
+        <TouchableOpacity 
+          style={styles.clienteButton} 
+          onPress={handleGoToCliente}
+        >
+          <Text style={styles.clienteButtonText}>Ir para Área do Cliente</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -305,9 +330,23 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   testButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  clienteButton: {
+    backgroundColor: '#8B5CF6',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10,
+    marginBottom: 20,
+  },
+  clienteButtonText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
