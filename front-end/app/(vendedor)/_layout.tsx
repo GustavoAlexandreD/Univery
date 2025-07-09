@@ -49,6 +49,12 @@ export default function VendedorTabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="detalhes"
+        options={{
+          href: null, // This hides the detalhes from the tab bar
+        }}
+      />
     </Tabs>
   );
 }

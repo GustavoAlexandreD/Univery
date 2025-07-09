@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bell, Eye, CircleCheck as CheckCircle, RefreshCw } from 'lucide-react-native';
 import HeaderEstablishment from '@/components/HeaderEstablishment';
+import { router } from 'expo-router';
 
 const activeOrders = [
   {
@@ -50,6 +51,10 @@ const orderHistory = [
 ];
 
 export default function VendedorDashboard() {
+  const handleVerDetalhes = () => {
+    router.push('/(vendedor)/detalhes/ver_entrega');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -84,7 +89,7 @@ export default function VendedorDashboard() {
                   <Text style={styles.refundButtonText}>Reembolsar cliente</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={styles.viewButton}>
+                <TouchableOpacity style={styles.viewButton} onPress={handleVerDetalhes}>
                   <Eye size={16} color="#FFFFFF" />
                   <Text style={styles.viewButtonText}>Ver Pedido</Text>
                 </TouchableOpacity>
