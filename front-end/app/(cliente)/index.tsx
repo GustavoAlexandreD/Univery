@@ -35,7 +35,7 @@ export default function ClienteHomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <HeaderCliente />
 
@@ -100,7 +100,7 @@ export default function ClienteHomeScreen() {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

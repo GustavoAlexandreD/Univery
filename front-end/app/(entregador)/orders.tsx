@@ -86,7 +86,7 @@ export default function EntregadorRestaurantsScreen() {
   const selectedCount = restaurants.filter(r => r.selected).length;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <Header />
 
@@ -176,7 +176,7 @@ export default function EntregadorRestaurantsScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -6,7 +6,7 @@ import { ShoppingBag } from 'lucide-react-native';
 
 export default function ClienteOrdersScreen() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>MEUS PEDIDOS</Text>
       </View>
@@ -19,7 +19,7 @@ export default function ClienteOrdersScreen() {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
