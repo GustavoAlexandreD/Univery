@@ -8,7 +8,6 @@ import {
   Image,
   TextInput
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Search, Heart, Plus, Minus, ShoppingCart } from 'lucide-react-native';
 
@@ -68,6 +67,27 @@ export default function CardapioClienteScreen() {
   const handleBack = () => {
     router.back();
   };
+
+  const handleOrder = () => {
+  const orderItems = Object.entries(cart).map(([itemId, quantity]) => {
+    const item = menuItems.find(item => item.id === itemId);
+    if (!item) return null;
+    return {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity,
+      total: item.price * quantity,
+    };
+  }).filter(Boolean); 
+
+   router.push({
+    pathname: '/(cliente)/cardapio/finalizar-pedido',
+    params: {
+      order: JSON.stringify(orderItems),
+    },
+  });
+};
 
   const filteredItems = menuItems.filter(item => {
     const matchesCategory = selectedCategory === 'Todos' || item.category === selectedCategory;
@@ -260,7 +280,8 @@ export default function CardapioClienteScreen() {
             </View>
           </View>
           
-          <TouchableOpacity style={styles.checkoutButton}>
+          <TouchableOpacity style={styles.checkoutButton}
+           onPress={() => handleOrder()}>
             <Text style={styles.checkoutButtonText}>Ver Carrinho</Text>
           </TouchableOpacity>
         </View>

@@ -41,11 +41,21 @@ const mockCartItems: CartItem[] = [
 export default function FinalizarPedidoScreen() {
   const params = useLocalSearchParams();
   const [deliveryOption, setDeliveryOption] = useState<'now' | 'later'>('now');
-  const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<DeliveryLocation | null>(null);
 
-  // Handle location data from navigation params
   useEffect(() => {
+    if (params.order) {
+      try {
+        const parsedCart = JSON.parse(params.order as string);
+        if (Array.isArray(parsedCart)) {
+          setCartItems(parsedCart);
+        }
+      } catch (error) {
+        console.error('Erro ao converter o carrinho:', error);
+      }
+    }
+
     if (params.locationId && params.locationName && params.locationDescription) {
       setSelectedLocation({
         id: params.locationId as string,
@@ -69,7 +79,6 @@ export default function FinalizarPedidoScreen() {
   };
 
   const addItem = (itemId: string) => {
-    // This would typically add the item back or increase quantity
     console.log('Add item:', itemId);
   };
 
@@ -86,7 +95,6 @@ export default function FinalizarPedidoScreen() {
   };
 
   const handleContinue = () => {
-    // Navigate to payment or confirmation screen
     console.log('Continue with order');
   };
 
@@ -132,9 +140,12 @@ export default function FinalizarPedidoScreen() {
                   />
                 </View>
                 <View style={styles.itemDetails}>
-                  <Text style={styles.itemQuantity}>{item.quantity}x {item.name}</Text>
-                  <Text style={styles.itemDescription}>{item.description}</Text>
-                  <Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
+                 <Text style={styles.itemQuantity}>{item.quantity}x {item.name}</Text>
+                 <Text style={styles.itemDescription}>{item.description}</Text>
+                 <Text style={styles.itemPrice}>
+                    R$ {(item.quantity * item.price).toFixed(2)} 
+                    <Text style={{ color: '#6B7280', fontSize: 12 }}> (R$ {item.price.toFixed(2)} un)</Text>
+                 </Text>
                 </View>
                 <View style={styles.itemActions}>
                   <TouchableOpacity 
@@ -272,7 +283,10 @@ export default function FinalizarPedidoScreen() {
             <Text style={styles.footerTotalLabel}>Total com entrega</Text>
             <Text style={styles.footerTotalValue}>
               {getTotal().toFixed(2)} <Text style={styles.currency}>R$</Text>
-              <Text style={styles.itemCount}> / 1 item</Text>
+              <Text style={styles.itemCount}>
+                / {cartItems.reduce((sum, item) => sum + item.quantity, 0)} 
+                {cartItems.reduce((sum, item) => sum + item.quantity, 0) === 1 ? ' item' : ' itens'}
+              </Text>
             </Text>
           </View>
           
