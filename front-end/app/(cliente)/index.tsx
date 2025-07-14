@@ -23,7 +23,6 @@ export default function ClienteHomeScreen() {
     const restaurant = restaurants.find(r => r.id === restaurantId);
     
     if (restaurant) {
-      // Navigate to the menu screen
       router.push({
         pathname: '/(cliente)/cardapio/cardapio-cliente',
         params: {

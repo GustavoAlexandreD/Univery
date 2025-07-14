@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Store, Clock, MapPin, Phone, Mail, Settings, ChartBar as BarChart3, Package, DollarSign, Users } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 const businessStats = [
   { id: 'revenue', label: 'Receita Hoje', value: 'R$ 245,00', icon: DollarSign, color: '#10B981' },
@@ -16,6 +17,10 @@ const businessStats = [
 ];
 
 export default function VendedorBusinessScreen() {
+  const handleManageProducts = () => {
+    router.push('/(vendedor)/detalhes/editar_cardapio');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -90,7 +95,7 @@ export default function VendedorBusinessScreen() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={styles.actionButton} onPress={handleManageProducts}>
             <Package size={24} color="#10B981" />
             <View style={styles.actionContent}>
               <Text style={styles.actionTitle}>Gerenciar Produtos</Text>
