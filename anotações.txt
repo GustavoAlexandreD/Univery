@@ -19,10 +19,14 @@ Comandos:
             npx expo install react-native-paper
             npm install nativewind tailwindcss
             npx tailwindcss init
+            npx expo install react-native-toast-message
+
         outros:
             npm install axios                                      #Usado para fazer requisições HTTP (ex: enviar dados para API).
             npm install react-hook-form                            #Gerenciar formulários
             npm install yup                                        #Usado para validação dos dados do formulário.
+            npm install formik
+            npm install @react-native-async-storage/async-storage
     back:   
         inicio: 
             npm init -y
