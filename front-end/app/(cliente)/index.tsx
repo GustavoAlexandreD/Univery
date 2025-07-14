@@ -94,7 +94,7 @@ export default function ClienteHomeScreen() {
                 styles.restaurantIcon,
                 selectedRestaurant === restaurant.id && styles.selectedRestaurantIcon
               ]}>
-                <Bookmark size={20} color={selectedRestaurant === restaurant.id ? '#4ADE80' : '#9CA3AF'} />
+                <Bookmark size={20} color={selectedRestaurant === restaurant.id ? '#3cb378' : '#9CA3AF'} />
               </View>
             </TouchableOpacity>
           ))}
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   selectedRestaurantItem: {
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     backgroundColor: '#F0FDF4',
   },
   restaurantInfo: {
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   selectedRestaurantName: {
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   restaurantDescription: {
     fontSize: 14,

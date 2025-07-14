@@ -286,6 +286,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     position: 'relative',
+    height: 60,
   },
   backButton: {
     padding: 8,
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   quantityButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   cartIcon: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     width: 48,
     height: 48,
     borderRadius: 24,
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
     color: '#1F2937',
   },
   checkoutButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,

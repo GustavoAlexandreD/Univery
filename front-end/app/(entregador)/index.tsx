@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#4ADE80',
+    borderLeftColor: '#3cb378',
   },
   orderHeader: {
     flexDirection: 'row',
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   statusBadge: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,

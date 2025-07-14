@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingVertical: 16,
     paddingHorizontal: 20,
   },
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
     letterSpacing: 0.5,
   },
   orderCard: {
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   zoomButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   voltarButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

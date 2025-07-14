@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   profileHeader: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingVertical: 40,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     paddingHorizontal: 16,
     elevation: 2,
     shadowColor: '#000',

@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     fontSize: 14,
-    color: '#4ADE80',
+    color: '#3cb378',
     fontWeight: '500',
   },
   cartItem: {
@@ -385,14 +385,14 @@ const styles = StyleSheet.create({
   itemPrice: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   itemActions: {
     alignItems: 'flex-end',
     gap: 8,
   },
   actionButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
   },
   addMoreText: {
     fontSize: 16,
-    color: '#4ADE80',
+    color: '#3cb378',
     fontWeight: '500',
   },
   locationButton: {
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 16,
-    color: '#4ADE80',
+    color: '#3cb378',
     fontWeight: '500',
   },
   selectedLocationContainer: {
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
   },
   selectedLocationHeader: {
     flexDirection: 'row',
@@ -471,12 +471,12 @@ const styles = StyleSheet.create({
   },
   selectedLocationNote: {
     fontSize: 12,
-    color: '#4ADE80',
+    color: '#3cb378',
     fontStyle: 'italic',
   },
   changeLocationButton: {
     alignSelf: 'flex-end',
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 6,
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   selectedDeliveryOption: {
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     backgroundColor: '#F0FDF4',
   },
   deliveryOptionContent: {
@@ -526,8 +526,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   selectedRadioButton: {
-    borderColor: '#4ADE80',
-    backgroundColor: '#4ADE80',
+    borderColor: '#3cb378',
+    backgroundColor: '#3cb378',
   },
   summaryRow: {
     flexDirection: 'row',
@@ -591,12 +591,12 @@ const styles = StyleSheet.create({
   footerTotalValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   currency: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   itemCount: {
     fontSize: 12,

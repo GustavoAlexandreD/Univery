@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   dashboardTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
     textAlign: 'center',
     letterSpacing: 0.5,
   },
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
     marginBottom: 16,
     letterSpacing: 0.5,
   },

@@ -248,8 +248,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedCircle: {
-    backgroundColor: '#4ADE80',
-    borderColor: '#4ADE80',
+    backgroundColor: '#3cb378',
+    borderColor: '#3cb378',
   },
   checkmark: {
     width: 8,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tag: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6B7280',
   },
   inactiveDeliveryButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
   },
   deliveryButtonText: {
     fontSize: 16,

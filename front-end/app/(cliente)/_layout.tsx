@@ -10,7 +10,7 @@ export default function ClienteTabLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#4ADE80',
+          tabBarActiveTintColor: '#3cb378',
           tabBarInactiveTintColor: '#9CA3AF',
           tabBarStyle: {
             backgroundColor: '#FFFFFF',
