@@ -7,7 +7,7 @@ const Conexao = require('./config/conexao');
 
 // Importar controllers
 const ClienteController = require('./controller/ClienteController');
-const RestauranteController = require('./controller/RestauranteController');
+const Estabelecimento = require('./controller/EstabelecimentoController');
 const AutorizacaoController = require('./controller/AutorizacaoController');
 
 // Importar middleware de autenticação (quando implementado)
@@ -47,12 +47,12 @@ app.delete('/clientes/:id', ClienteController.deletar);
 app.patch('/clientes/:id/entregador', ClienteController.atualizarEntregador);
 
 // ==================== ROTAS DE RESTAURANTES ====================
-app.get('/restaurantes', RestauranteController.listar);
-app.get('/restaurantes/:id', RestauranteController.consultarPorID);
-app.post('/restaurantes', RestauranteController.criar);
-app.put('/restaurantes/:id', RestauranteController.atualizar);
-app.delete('/restaurantes/:id', RestauranteController.deletar);
-app.patch('/restaurantes/:id/status', RestauranteController.atualizarStatus);
+app.get('/estabelecimentos', Estabelecimento.listar);
+app.get('/estabelecimentos/:id', Estabelecimento.consultarPorID);
+app.post('/estabelecimentos', Estabelecimento.criar);
+app.put('/estabelecimentos/:id', Estabelecimento.atualizar);
+app.delete('/estabelecimentos/:id', Estabelecimento.deletar);
+app.patch('/estabelecimentos/:id/status', Estabelecimento.atualizarStatus);
 
 // ==================== MIDDLEWARE DE ERRO ====================
 app.use((err, req, res, next) => {

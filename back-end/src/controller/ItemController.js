@@ -1,4 +1,4 @@
-const ItemModel = require("../model/Item.js");
+const Item = require("../model/Item.js");
 const ErrorServices = require("../services/ErrorServices.js");
 const Estabelecimento = require("../model/Estabelecimento.js");
 const Pedido = require("../model/Pedido.js");
@@ -8,7 +8,7 @@ const ItemController = {
 
     listar: async (request, response) => {
         try {
-            const itens = await ItemModel.findAll({
+            const itens = await Item.findAll({
                 include: [
                     { model: Estabelecimento },
                     {
@@ -28,7 +28,7 @@ const ItemController = {
         try {
             const id = request.params.id;
 
-            const item = await ItemModel.findByPk(id, {
+            const item = await Item.findByPk(id, {
                 include: [
                     { model: Estabelecimento },
                     {
@@ -52,7 +52,7 @@ const ItemController = {
         try {
             const dados = request.body;
 
-            const novoItem = await ItemModel.create(dados);
+            const novoItem = await Item.create(dados);
 
             return response.json({
                 message: "Item criado com sucesso!",
@@ -68,7 +68,7 @@ const ItemController = {
             const id = request.params.id;
             const dados = request.body;
 
-            await ItemModel.update(dados, {
+            await Item.update(dados, {
                 where: { id }
             });
 
@@ -85,7 +85,7 @@ const ItemController = {
             const id = request.params.id;
 
             await ItemPedido.destroy({ where: { id_item: id } }); 
-            await ItemModel.destroy({ where: { id } });
+            await Item.destroy({ where: { id } });
 
             return response.json({
                 message: "Item deletado com sucesso!"
@@ -100,7 +100,7 @@ const ItemController = {
             const id = request.params.id;
             const { preco } = request.body;
 
-            const item = await ItemModel.findByPk(id);
+            const item = await Item.findByPk(id);
             if (!item) {
                 return response.status(404).json({ erro: "Item não encontrado" });
             }

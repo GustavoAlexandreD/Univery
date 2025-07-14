@@ -1,4 +1,4 @@
-const ItemPedidoModel = require("../model/ItemPedido.js");
+const ItemPedido = require("../model/ItemPedido.js");
 const ErrorServices = require("../services/ErrorServices.js");
 const Item = require("../model/Item.js");
 const Pedido = require("../model/Pedido.js");
@@ -7,7 +7,7 @@ const ItemPedidoController = {
 
     listar: async (request, response) => {
         try {
-            const dados = await ItemPedidoModel.findAll({
+            const dados = await ItemPedido.findAll({
                 include: [
                     { model: Pedido },
                     { model: Item }
@@ -24,7 +24,7 @@ const ItemPedidoController = {
         try {
             const id_pedido = request.params.id;
 
-            const itens = await ItemPedidoModel.findAll({
+            const itens = await ItemPedido.findAll({
                 where: { id_pedido },
                 include: [{ model: Item }]
             });
@@ -39,7 +39,7 @@ const ItemPedidoController = {
         try {
             const { id_pedido, id_item, quantidade } = request.body;
 
-            await ItemPedidoModel.create({ id_pedido, id_item, quantidade });
+            await ItemPedido.create({ id_pedido, id_item, quantidade });
 
             return response.json({
                 message: "Item adicionado ao pedido com sucesso!"
@@ -54,7 +54,7 @@ const ItemPedidoController = {
             const { id_pedido, id_item } = request.params;
             const { quantidade } = request.body;
 
-            const atualizado = await ItemPedidoModel.update(
+            const atualizado = await ItemPedido.update(
                 { quantidade },
                 { where: { id_pedido, id_item } }
             );
@@ -72,7 +72,7 @@ const ItemPedidoController = {
         try {
             const { id_pedido, id_item } = request.params;
 
-            await ItemPedidoModel.destroy({
+            await ItemPedido.destroy({
                 where: { id_pedido, id_item }
             });
 

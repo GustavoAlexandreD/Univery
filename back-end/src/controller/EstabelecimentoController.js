@@ -1,18 +1,18 @@
-const RestauranteModel = require("../model/RestauranteModel");
+const Estabelecimento = require("../model/Estabelecimento.js");
 const ErrorServices = require("../services/ErrorServices.js");
-const RestaurantesServices = require("../services/RestaurantesServices");
+const Estabelecimento = require("../services/EstabelecimentoServices.js");
 const Helpers = require('../config/Helpers.js');
 
-const RestauranteController = {
+const Estabelecimento = {
 
     listar: async (request, response) => {
-        const dados = await RestauranteModel.findAll();
+        const dados = await Estabelecimento.findAll();
         return response.json(dados);
     },
 
     consultarPorID: async (request, response) => {
         const id = request.params.id;
-        const dados = await RestauranteModel.findByPk(id);
+        const dados = await Estabelecimento.findByPk(id);
         return response.json(dados);
     },
 
@@ -21,15 +21,15 @@ const RestauranteController = {
             const dados = request.body;
             dados.senha = Helpers.crypto(dados.senha);
 
-            await RestaurantesServices.validandoRestaurante(dados);
-            await RestauranteModel.create(dados);
+            await Estabelecimento.validandoEstabelecimento(dados);
+            await Estabelecimento.create(dados);
 
             return response.json({
-                message: "Restaurante criado com sucesso!",
+                message: "Estabelecimento criado com sucesso!",
                 data: dados
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao cadastrar restaurante.", e, response);
+            return ErrorServices.validacaoErro("Erro ao cadastrar Estabelecimento.", e, response);
         }
     },
 
@@ -41,24 +41,24 @@ const RestauranteController = {
             dados.senha = Helpers.crypto(dados.senha);
         }
 
-        await RestauranteModel.update(dados, {
+        await Estabelecimento.update(dados, {
             where: { id }
         });
 
         return response.json({
-            message: "Restaurante atualizado com sucesso!"
+            message: "Estabelecimento atualizado com sucesso!"
         });
     },
 
     deletar: async (request, response) => {
         const id = request.params.id;
 
-        await RestauranteModel.destroy({
+        await Estabelecimento.destroy({
             where: { id }
         });
 
         return response.json({
-            message: "Restaurante deletado com sucesso!"
+            message: "Estabelecimento deletado com sucesso!"
         });
     },
 
@@ -67,23 +67,23 @@ const RestauranteController = {
             const id = request.params.id;
             const { ativo } = request.body;
 
-            const restaurante = await RestauranteModel.findByPk(id);
-            if (!restaurante) {
-                return response.status(404).json({ erro: 'Restaurante não encontrado' });
+            const estabelecimento = await Estabelecimento.findByPk(id);
+            if (!estabelecimento) {
+                return response.status(404).json({ erro: 'Estabelecimento não encontrado' });
             }
 
-            restaurante.ativo = ativo;
-            await restaurante.save();
+            estabelecimento.ativo = ativo;
+            await estabelecimento.save();
 
             return response.json({
                 message: "Status de funcionamento atualizado com sucesso!",
-                data: restaurante
+                data: estabelecimento
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao atualizar status do restaurante.", e, response);
+            return ErrorServices.validacaoErro("Erro ao atualizar status do Estabelecimento.", e, response);
         }
     }
 
 };
 
-module.exports = RestauranteController;
+module.exports = Estabelecimento;

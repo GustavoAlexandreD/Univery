@@ -1,4 +1,4 @@
-const PedidoModel = require("../model/Pedido.js");
+const Pedido = require("../model/Pedido.js");
 const ErrorServices = require("../services/ErrorServices.js");
 const Cliente = require("../model/EntregadorCliente.js");
 const Estabelecimento = require("../model/Estabelecimento.js");
@@ -9,7 +9,7 @@ const PedidoController = {
 
     listar: async (request, response) => {
         try {
-            const pedidos = await PedidoModel.findAll({
+            const pedidos = await Pedido.findAll({
                 include: [
                     { model: Cliente },
                     { model: Estabelecimento },
@@ -28,7 +28,7 @@ const PedidoController = {
     consultarPorID: async (request, response) => {
         try {
             const id = request.params.id;
-            const pedido = await PedidoModel.findByPk(id, {
+            const pedido = await Pedido.findByPk(id, {
                 include: [
                     { model: Cliente },
                     { model: Estabelecimento },
@@ -53,7 +53,7 @@ const PedidoController = {
         try {
             const dados = request.body;
 
-            const novoPedido = await PedidoModel.create({
+            const novoPedido = await Pedido.create({
                 status: dados.status,
                 id_cliente: dados.id_cliente,
                 id_estabelecimento: dados.id_estabelecimento
@@ -82,7 +82,7 @@ const PedidoController = {
             const id = request.params.id;
             const dados = request.body;
 
-            await PedidoModel.update(dados, {
+            await Pedido.update(dados, {
                 where: { id }
             });
 
@@ -99,7 +99,7 @@ const PedidoController = {
             const id = request.params.id;
 
             await ItemPedido.destroy({ where: { id_pedido: id } });
-            await PedidoModel.destroy({ where: { id } });
+            await Pedido.destroy({ where: { id } });
 
             return response.json({
                 message: "Pedido deletado com sucesso!"
@@ -114,7 +114,7 @@ const PedidoController = {
             const id = request.params.id;
             const { status } = request.body;
 
-            const pedido = await PedidoModel.findByPk(id);
+            const pedido = await Pedido.findByPk(id);
             if (!pedido) {
                 return response.status(404).json({ erro: "Pedido não encontrado" });
             }
