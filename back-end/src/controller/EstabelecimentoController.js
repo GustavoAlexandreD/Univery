@@ -1,5 +1,5 @@
 const RestauranteModel = require("../model/RestauranteModel");
-const ErrorServices = require("../services/ErrorServices");
+const ErrorServices = require("../services/ErrorServices.js");
 const RestaurantesServices = require("../services/RestaurantesServices");
 const Helpers = require('../config/Helpers.js');
 
