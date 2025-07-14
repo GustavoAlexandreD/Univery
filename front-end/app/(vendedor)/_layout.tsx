@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { ChefHat, ClipboardList, Building2 } from 'lucide-react-native';
+import { StyleSheet } from 'react-native';
 
 export default function VendedorTabLayout() {
   return (

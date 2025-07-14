@@ -53,7 +53,7 @@ export default function EntregadorHomeScreen() {
 
   if (hasActiveOrder) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Header />
         
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -127,13 +127,13 @@ export default function EntregadorHomeScreen() {
             <Text style={styles.clienteButtonText}>Ir para Área do Cliente</Text>
           </TouchableOpacity>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 
   // Default state - No active orders
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -177,7 +177,7 @@ export default function EntregadorHomeScreen() {
           <Text style={styles.clienteButtonText}>Ir para Área do Cliente</Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -11,7 +11,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Profile Header */}
       <View style={styles.profileHeader}>
         <Text style={styles.profileHeaderTitle}>Perfil do{'\n'}Entregador</Text>
@@ -48,7 +48,7 @@ export default function ProfileScreen() {
         {/* Bottom spacing for tab bar */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

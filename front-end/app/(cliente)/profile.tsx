@@ -6,7 +6,7 @@ import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-n
 
 export default function ClienteProfileScreen() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>PERFIL CLIENTE</Text>
       </View>
@@ -36,7 +36,7 @@ export default function ClienteProfileScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
