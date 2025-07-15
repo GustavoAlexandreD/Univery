@@ -8,7 +8,8 @@ export default function RootLayout() {
 
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack initialRouteName='index' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
         <Stack.Screen name="(cliente)" />
         <Stack.Screen name="(entregador)" />
         <Stack.Screen name="cliente/local/local-home" />

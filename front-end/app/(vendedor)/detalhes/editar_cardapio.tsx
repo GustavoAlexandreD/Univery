@@ -310,7 +310,7 @@ export default function EditarCardapioScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#F9FAFB',
   },
   header: {
     backgroundColor: '#3cb378',
@@ -411,6 +411,7 @@ const styles = StyleSheet.create({
   },
   categoryWrapper: {
     position: 'relative',
+    marginTop:10,
   },
   categoryButton: {
     paddingHorizontal: 20,
@@ -445,8 +446,9 @@ const styles = StyleSheet.create({
   addCategoryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 8,
+    marginTop:8,
     borderRadius: 20,
     backgroundColor: '#F0FDF4',
     borderWidth: 1,
@@ -454,13 +456,14 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   addCategoryText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '500',
     color: '#3cb378',
   },
   newCategoryInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop:8,
     gap: 8,
   },
   newCategoryInput: {
@@ -510,13 +513,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   menuItem: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   menuItemImage: {
     width: 60,
@@ -565,12 +573,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   addItemButton: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    elevation:2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   bottomSpacing: {
     height: 100,
