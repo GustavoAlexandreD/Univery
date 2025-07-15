@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -225,10 +225,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     borderWidth: 3,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
   },
   zoomButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   selectedLocationCard: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     marginHorizontal: 20,
     borderRadius: 16,
     padding: 20,

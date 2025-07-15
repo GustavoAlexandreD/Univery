@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   gridButton: {
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#24a637',
+    backgroundColor: '#3cb378',
     borderRadius: 5,
     margin: 4,
   },

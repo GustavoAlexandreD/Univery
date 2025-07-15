@@ -47,7 +47,7 @@ export default function AddProdutoScreen() {
         id: 'juice',
         name: 'Suco',
         category: 'Bebidas',
-        backgroundColor: '#4ADE80',
+        backgroundColor: '#3cb378',
         component: (
         <View style={styles.juiceIcon}>
             <View style={styles.juiceContainer}>
@@ -177,7 +177,7 @@ export default function AddProdutoScreen() {
           <TextInput
             style={styles.priceInput}
             placeholder="Digite o preço do produto"
-            placeholderTextColor="#4ADE80"
+            placeholderTextColor='#3cb378'
             value={productPrice}
             onChangeText={setProductPrice}
             keyboardType="numeric"
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -336,9 +336,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    color: '#4ADE80',
+    color: '#3cb378',
     borderWidth: 2,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     fontWeight: '600',
   },
   saveButton: {

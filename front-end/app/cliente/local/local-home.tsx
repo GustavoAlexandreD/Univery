@@ -122,7 +122,7 @@ export default function ClienteLocationHomeScreen() {
                 styles.locationIcon,
                 selectedLocation === location.id && styles.selectedLocationIcon
               ]}>
-                <Search size={20} color={selectedLocation === location.id ? '#4ADE80' : '#9CA3AF'} />
+                <Search size={20} color={selectedLocation === location.id ? '#3cb378' : '#9CA3AF'} />
               </View>
             </TouchableOpacity>
           ))}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
     textAlign: 'center',
     letterSpacing: 0.5,
   },
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   zoomButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
     letterSpacing: 0.5,
   },
   locationList: {
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   selectedLocationItem: {
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     backgroundColor: '#F0FDF4',
   },
   locationInfo: {
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   selectedLocationName: {
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   locationDescription: {
     fontSize: 14,

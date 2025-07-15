@@ -64,11 +64,11 @@ export default function VerEntrega() {
             {/* Location Info */}
             <View style={styles.locationSection}>
               <View style={styles.locationRow}>
-                <MapPin size={16} color="#4ADE80" />
+                <MapPin size={16} color='#3cb378' />
                 <Text style={styles.locationText}>De: {orderDetails.origin}</Text>
               </View>
               <View style={styles.locationRow}>
-                <MapPin size={16} color="#4ADE80" />
+                <MapPin size={16} color='#3cb378' />
                 <Text style={styles.locationText}>Para: {orderDetails.destination}</Text>
               </View>
             </View>

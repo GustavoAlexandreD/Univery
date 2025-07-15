@@ -49,7 +49,7 @@ const iconOptions: IconOption[] = [
     id: 'juice',
     name: 'Suco',
     category: 'Bebidas',
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     component: (
       <View style={styles.juiceIcon}>
         <View style={styles.juiceContainer}>
@@ -215,7 +215,7 @@ const iconOptions: IconOption[] = [
           <TextInput
             style={styles.priceInput}
             placeholder="Digite o preço do produto"
-            placeholderTextColor="#4ADE80"
+            placeholderTextColor='#3cb378'
             value={`${productPrice} R$`}
             onChangeText={(text) => setProductPrice(text.replace(' R$', ''))}
             keyboardType="numeric"
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -388,26 +388,26 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxChecked: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
   },
   priceInput: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    color: '#4ADE80',
+    color: '#3cb378',
     borderWidth: 2,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     fontWeight: '600',
   },
   saveButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     marginHorizontal: 20,
     borderRadius: 12,
     paddingVertical: 16,

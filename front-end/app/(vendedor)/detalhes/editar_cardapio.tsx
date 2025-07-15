@@ -185,7 +185,7 @@ export default function EditarCardapioScreen() {
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Search size={20} color="#4ADE80" />
+            <Search size={20} color='#3cb378' />
             <TextInput
               style={styles.searchInput}
               placeholder="Pesquise por item do cardápio"
@@ -232,7 +232,7 @@ export default function EditarCardapioScreen() {
                 style={styles.addCategoryButton}
                 onPress={handleAddNewCategory}
               >
-                <Plus size={16} color="#4ADE80" />
+                <Plus size={16} color='#3cb378' />
                 <Text style={styles.addCategoryText}>Nova Categoria</Text>
               </TouchableOpacity>
             ) : (
@@ -297,7 +297,7 @@ export default function EditarCardapioScreen() {
 
           {/* Add New Item Button */}
           <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
-            <Plus size={32} color="#4ADE80" />
+            <Plus size={32} color='#3cb378' />
           </TouchableOpacity>
         </View>
 
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   header: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    height:60,
   },
   backButton: {
     padding: 8,
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
     right: -8,
     width: 32,
     height: 32,
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 12,
     borderWidth: 1,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
   },
   searchInput: {
     flex: 1,
@@ -418,7 +419,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   selectedCategoryButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
   },
   categoryButtonText: {
     fontSize: 14,
@@ -449,13 +450,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F0FDF4',
     borderWidth: 1,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     gap: 6,
   },
   addCategoryText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   newCategoryInputContainer: {
     flexDirection: 'row',
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
   newCategoryInput: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#4ADE80',
+    borderColor: '#3cb378',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   confirmCategoryButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     width: 28,
     height: 28,
     borderRadius: 14,
@@ -540,7 +541,7 @@ const styles = StyleSheet.create({
   menuItemPrice: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#4ADE80',
+    color: '#3cb378',
   },
   menuItemActions: {
     flexDirection: 'row',
@@ -548,7 +549,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   editButton: {
-    backgroundColor: '#4ADE80',
+    backgroundColor: '#3cb378',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
