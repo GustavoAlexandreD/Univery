@@ -53,9 +53,9 @@ git checkout -b nome-da-branch
 Para **mesclar** uma branch (ex: `feature-xyz`) na branch atual (ex: `main`), use o seguinte comando:
 
 ```bash
-git merge main # estando na feature-xyz
+git merge feature-xyz # estando na main
 ```
 
-Isso vai unir as mudanças da branch indicada à branch ``feature-xyz``.
+Isso vai unir as mudanças da branch `feature-xyz` à branch ``main``.
 
 ---

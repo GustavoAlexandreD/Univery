@@ -1,17 +1,17 @@
-const ClienteModel = require("../model/ClienteModel");
+const Cliente = require("../model/Cliente");
 const ErrorServices = require("../services/ErrorServices");
 const ClientesServices = require("../services/ClientesServices");
 const Helpers = require('../config/Helpers.js');
 
 const ClienteController = {
     listar: async (request, response) => {
-        const dados = await ClienteModel.findAll();
+        const dados = await Cliente.findAll();
         return response.json(dados);
     },
 
     consultarPorID: async (request, response) => {
         const id = request.params.id;
-        const dados = await ClienteModel.findByPk(id);
+        const dados = await Cliente.findByPk(id);
         return response.json(dados);
     },
 
@@ -21,7 +21,7 @@ const ClienteController = {
             dados.senha = Helpers.crypto(dados.senha);
 
             await ClientesServices.validandoCliente(dados);
-            await ClienteModel.create(dados);
+            await Cliente.create(dados);
 
             return response.json({
                 message: "Cliente criado com sucesso!",
@@ -40,7 +40,7 @@ const ClienteController = {
             dados.senha = Helpers.crypto(dados.senha);
         }
 
-        await ClienteModel.update(dados, {
+        await Cliente.update(dados, {
             where: { id }
         });
 
@@ -52,7 +52,7 @@ const ClienteController = {
     deletar: async (request, response) => {
         const id = req.params.id;
 
-        await ClienteModel.destroy({ where: { id } });
+        await Cliente.destroy({ where: { id } });
 
         return res.json({
             message: "Cliente deletado com sucesso!"
@@ -64,7 +64,7 @@ const ClienteController = {
             const id = req.params.id;
             const { entregador } = req.body;
 
-            const cliente = await ClienteModel.findByPk(id);
+            const cliente = await Cliente.findByPk(id);
             if (!cliente) {
                 return res.status(404).json({ erro: 'Cliente não encontrado' });
             }

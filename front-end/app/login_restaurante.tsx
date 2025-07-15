@@ -16,17 +16,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Api from '../config/Api';
 
 // Tipos do formulário
-type LoginFormValues = {
+type LoginRestauranteFormValues = {
   email: string;
   senha: string;
 };
 
-export default function LoginScreen() {
+export default function LoginRestauranteScreen() {
   const router = useRouter();
 
   async function realizarLogin(
-    values: LoginFormValues,
-    { resetForm }: FormikHelpers<LoginFormValues>
+    values: LoginRestauranteFormValues,
+    { resetForm }: FormikHelpers<LoginRestauranteFormValues>
   ) {
     try {
       const response = await Api.post('/auth/login', values);
@@ -35,7 +35,7 @@ export default function LoginScreen() {
         // Armazenar token com AsyncStorage
         await AsyncStorage.setItem('token', response.data.token);
         resetForm();
-        router.push('/(cliente)');
+        router.push('/(vendedor)');
       } else {
         Alert.alert('Erro', 'Credenciais inválidas.');
       }
@@ -57,21 +57,17 @@ export default function LoginScreen() {
       </View>
       
       <View style={styles.curvedContent}>
-        <Text style={styles.title}>Login Cliente</Text>
+        <Text style={styles.title}>Login Restaurante</Text>
         <Text style={styles.subtitle}>
-          Informe seu nome de usuário e senha da UECE
+          Acesse sua conta de estabelecimento
         </Text>
 
-        <Formik<LoginFormValues>
+        <Formik<LoginRestauranteFormValues>
           initialValues={{ email: '', senha: '' }}
           validationSchema={Yup.object({
             email: Yup.string()
-              .required('Email obrigatório')
-              .test('email-uece', 'Use seu email @aluno.uece.br', (value) => {
-                if (!value) return false;
-                const regexEmailUECE = /^[^\s@]+@aluno\.uece\.br$/;
-                return regexEmailUECE.test(value);
-              }),
+              .email('Email inválido')
+              .required('Email obrigatório'),
             senha: Yup.string().required('Senha obrigatória'),
           })}
           onSubmit={realizarLogin}
@@ -85,13 +81,13 @@ export default function LoginScreen() {
             touched,
           }) => (
             <>
-              <Text style={styles.label}>USUÁRIO</Text>
+              <Text style={styles.label}>E-MAIL</Text>
               <TextInput
                 style={styles.input}
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
-                placeholder="Ex: gustavo@aluno.uece.br"
+                placeholder="Ex: lanchonete@campus.edu.br"
                 placeholderTextColor="#888"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -99,7 +95,6 @@ export default function LoginScreen() {
               {touched.email && errors.email && (
                 <Text style={styles.error}>{errors.email}</Text>
               )}
-              <Text style={styles.helpText}>Use seu email institucional @aluno.uece.br</Text>
 
               <Text style={styles.label}>SENHA</Text>
               <TextInput
@@ -123,12 +118,12 @@ export default function LoginScreen() {
                 <Text style={styles.link}>Esqueceu sua senha?</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push('/cadastro_cliente')}>
-                <Text style={styles.link}>Cadastrar-se e pedir comida!</Text>
+              <TouchableOpacity onPress={() => router.push('/cadastro_restaurante')}>
+                <Text style={styles.link}>Cadastrar meu restaurante</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push('/login_restaurante')}>
-                <Text style={styles.link}>Sou restaurante</Text>
+              <TouchableOpacity onPress={() => router.push('/')}>
+                <Text style={styles.link}>Sou cliente</Text>
               </TouchableOpacity>
             </>
           )}
@@ -146,7 +141,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 280,
-    backgroundColor: '#2CA94F',
+    backgroundColor: '#2CA94F', // Cor diferente para restaurantes
     zIndex: 0,
   },
   logoContainer: {
@@ -206,17 +201,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 4,
   },
-  helpText: {
-    color: '#666',
-    fontSize: 11,
-    alignSelf: 'flex-start',
-    marginBottom: 8,
-    fontStyle: 'italic',
-  },
   button: {
     width: '100%',
     height: 44,
-    backgroundColor: '#2CA94F',
+    backgroundColor: '#2CA94F', // Cor diferente para restaurantes
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -230,4 +218,4 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
   },
-});
+}); 

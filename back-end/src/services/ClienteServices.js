@@ -1,4 +1,4 @@
-const ClienteModel = require("../model/ClienteModel");
+const Cliente = require("../model/Cliente");
 
 const ClientesServices = {
 
@@ -13,7 +13,7 @@ const ClientesServices = {
         }
 
         // Verifica se o e-mail já está em uso
-        const clienteExistente = await ClienteModel.findOne({
+        const clienteExistente = await Cliente.findOne({
             where: { email: dados.email }
         });
         if (clienteExistente) {

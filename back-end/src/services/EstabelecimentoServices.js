@@ -1,8 +1,8 @@
-const RestauranteModel = require("../model/RestauranteModel");
+const Estabelecimento = require("../model/Estabelecimento");
 
-const RestaurantesServices = {
+const EstabelecimentoServices = {
 
-    validandoRestaurante: async (dados) => {
+    validandoEstabelecimento: async (dados) => {
 
         // Validação do nome (qualquer nome aceito, pode remover essa validação se quiser)
         if (!dados.nome || dados.nome.trim().length === 0) {
@@ -15,11 +15,11 @@ const RestaurantesServices = {
         }
 
         // Verifica se o CNPJ já está cadastrado
-        const cnpjExistente = await RestauranteModel.findOne({
+        const cnpjExistente = await Estabelecimento.findOne({
             where: { cnpj: dados.cnpj }
         });
         if (cnpjExistente) {
-            throw('CNPJ já está cadastrado para outro restaurante.');
+            throw('CNPJ já está cadastrado para outro estabelecimento.');
         }
 
         // Validação do e-mail (qualquer e-mail válido, você pode refinar)
@@ -28,11 +28,11 @@ const RestaurantesServices = {
         }
 
         // Verifica se o e-mail já está em uso
-        const emailExistente = await RestauranteModel.findOne({
+        const emailExistente = await Estabelecimento.findOne({
             where: { email: dados.email }
         });
         if (emailExistente) {
-            throw('E-mail já está sendo utilizado por outro restaurante.');
+            throw('E-mail já está sendo utilizado por outro estabelecimento.');
         }
 
         // Validação da senha (mesma regra que cliente)
@@ -51,4 +51,4 @@ const RestaurantesServices = {
     }
 };
 
-module.exports = RestaurantesServices;
+module.exports = EstabelecimentoServices;
