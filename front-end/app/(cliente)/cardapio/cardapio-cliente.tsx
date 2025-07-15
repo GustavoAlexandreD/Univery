@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   View, 
   Text, 
@@ -11,6 +11,8 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Search, Heart, Plus, Minus, ShoppingCart } from 'lucide-react-native';
 
+import { currentItemStore } from '@/stores/currentItemStore'; 
+
 interface MenuItem {
   id: string;
   name: string;
@@ -20,7 +22,7 @@ interface MenuItem {
   category: string;
 }
 
-const menuItems: MenuItem[] = [
+const menuItemsTeste: MenuItem[] = [
   {
     id: '1',
     name: 'Tapioca com Queijo',
@@ -56,17 +58,46 @@ const menuItems: MenuItem[] = [
 ];
 
 const categories = ['Todos', 'Tapiocas', 'Sucos'];
+const {restauranteId} = useLocalSearchParams()
+
 
 export default function CardapioClienteScreen() {
   const { restaurantId, restaurantName } = useLocalSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<{[key: string]: number}>({});
+
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [menuItems, setMenuItems] = useState(menuItemsTeste)
+  const [loading, setLoading] = useState(false);
+
+  const {currentItem, setCurrentItem} = currentItemStore()
+
+
+  useEffect(() => {
+  // Faça a requisição ao backend
+  fetch(`http://192.168.0.10:3000/restaurantes/${restauranteId}`) // use seu IP local em vez de localhost
+    .then((response) => response.json())
+    .then((data) => {
+      setMenuItems(data); // Atualiza os restaurantes com os dados da API
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar restaurantes:', error);
+      setLoading(false);
+    });
+  }, []);
+
 
   const handleBack = () => {
     router.back();
   };
+
+  const handleItemClick = (item: any) => {
+      console.log(item)
+      setCurrentItem(item)
+      router.push("../../itemCliente/item")
+  }
 
   const handleOrder = () => {
   const orderItems = Object.entries(cart).map(([itemId, quantity]) => {
@@ -206,7 +237,7 @@ export default function CardapioClienteScreen() {
           <Text style={styles.sectionTitle}>{selectedCategory}</Text>
           
           {filteredItems.map((item) => (
-        <TouchableOpacity onPress={() => router.push("../../itemCliente/item")} >
+        <TouchableOpacity onPress={() => handleItemClick(item)} >
             <View key={item.id} style={styles.menuItemCompact}>
                 <Image
                     source={{ uri: item.image }}

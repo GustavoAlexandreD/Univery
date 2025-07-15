@@ -1,21 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bike, Bookmark } from 'lucide-react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams  } from 'expo-router';
 import HeaderCliente from '@/components/HeaderCliente';
 
 const { width } = Dimensions.get('window');
 
 export default function ClienteHomeScreen() {
-  const restaurants = [
+
+  const restaurants_teste = [
     { id: '1', name: 'Ueceana', description: 'Marmitas por ótimos preços', tags: ['Marmitas', 'bebidas'] },
     { id: '2', name: 'Billy', description: 'Vendo tapioca', tags: ['lanche', 'bebidas'] },
     { id: '3', name: 'Gaiola', description: 'Salgados e marmitas', tags: ['Salgados', 'Marmitas', 'bebidas'] },
     { id: '4', name: 'Tia do Dindin', description: 'Dindins gourmet', tags: ['doces'] },
   ];
-  
+
+  const [restaurants, setRestaurants] = useState(restaurants_teste)
   const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Faça a requisição ao backend
+    fetch('http://192.168.0.10:3000/restaurantes') // use seu IP local em vez de localhost
+      .then((response) => response.json())
+      .then((data) => {
+        setRestaurants(data); // Atualiza os restaurantes com os dados da API
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar restaurantes:', error);
+        setLoading(false);
+      });
+  }, []);
   
   const handleRestaurantSelect = (restaurantId: string) => {
     setSelectedRestaurant(restaurantId);
@@ -24,14 +41,17 @@ export default function ClienteHomeScreen() {
     
     if (restaurant) {
       router.push({
-        pathname: '/(cliente)/cardapio/cardapio-cliente',
+        pathname: `/(cliente)/cardapio/cardapio-cliente`,
         params: {
           restaurantId: restaurant.id,
-          restaurantName: restaurant.name,
         }
       });
     }
   };
+
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return (
     <View style={styles.container}>

@@ -3,12 +3,12 @@ import {View, StyleSheet, Image} from 'react-native';
 import BackButton from '@/components/BackButton';
 
 
-export default function ItemEstablishmentBanner() {
+export default function ItemEstablishmentBanner({urlImagem}) {
   return (
     <View style={styles.divBackgroundItem}>
       <BackButton />
       <Image
-          src={'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300'}
+          source={{uri: urlImagem}}
           style={{ width: 120, height: 120, alignSelf: 'center', marginTop: 10, borderRadius: 100}}
           resizeMode="cover"
       />

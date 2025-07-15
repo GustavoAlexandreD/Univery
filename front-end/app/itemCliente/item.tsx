@@ -9,12 +9,17 @@ import NavegationEstablismentView from '@/components/NavegationEstablishmentView
 import PhoneButton from '@/components/PhoneButton';
 import MailButton from '@/components/MailButton';
 
+import { currentItemStore } from '@/stores/currentItemStore'; 
+
+
 export default function item() {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [observacao, setObservacao] = useState('');
-
   const [quantity, setQuantity] = useState(0)
+
+  const {currentItem, setCurrentItem} = currentItemStore()
+
 
   const [fontsLoaded] = useFonts({
     'DMSans-Regular': require('../../assets/fonts/DMSans-Regular.ttf'),
@@ -26,16 +31,17 @@ export default function item() {
     <SafeAreaView style={styles.safeArea} >
 
       {/* Fundo verde no topo com ícone de bebida */}
-      <ItemEstablishmentBanner />
+
+      <ItemEstablishmentBanner urlImagem={currentItem.image}/>
 
       <PhoneButton />
       <MailButton />
 
       <View style={styles.container}>
 
-        <Text style={styles.nameOfProductText}>Nome do Produto</Text>
+        <Text style={styles.nameOfProductText}>{currentItem.name}</Text>
 
-        <Text style={styles.descriptionOfProductText}> Descrição do Produto</Text>
+        <Text style={styles.descriptionOfProductText}>{currentItem.description}</Text>
 
         <Text style={styles.observationText}> Observações </Text>  
         
