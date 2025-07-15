@@ -8,11 +8,13 @@ import {
   Dimensions
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { ShoppingBag, Store, Bell } from 'lucide-react-native';
 import Header from '@/components/Header';
 
 const { width } = Dimensions.get('window');
+const in_development = false
+
 
 export default function UserTypeSelection() {
   const handleClientePress = () => {
@@ -22,6 +24,11 @@ export default function UserTypeSelection() {
   const handleVendedorPress = () => {
     router.push('/(vendedor)');
   };
+
+  if (in_development) {
+    console.log('REDIRECIONOU')
+    return <Redirect href={'index_real'} />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
