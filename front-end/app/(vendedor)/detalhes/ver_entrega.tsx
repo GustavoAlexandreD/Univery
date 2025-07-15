@@ -18,6 +18,10 @@ export default function VerEntrega() {
     items: '1x Suco de Uva 300ml.',
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   const handleVoltar = () => {
     router.back();
   };
@@ -34,26 +38,15 @@ export default function VerEntrega() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('@/assets/images/UECE_icone.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-            <Text style={styles.headerTitle}>UNIVERY</Text>
-          </View>
-          <View style={styles.mapIconContainer}>
-            <Map size={20} color="#FFFFFF" />
-          </View>
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+          <ArrowLeft size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerTitle}>DETALHES DO PEDIDO</Text>
         </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Section Title */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>DETALHES DO PEDIDO</Text>
-        </View>
 
         {/* Order Details Card */}
         <View style={styles.orderCard}>
@@ -107,14 +100,6 @@ export default function VerEntrega() {
           </TouchableOpacity>
         </View>
 
-        {/* Voltar Button */}
-        <TouchableOpacity 
-          style={styles.voltarButton}
-          onPress={handleVoltar}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.voltarButtonText}>Voltar</Text>
-        </TouchableOpacity>
       </ScrollView>
 
       {/* Modal for Enlarged Map */}
@@ -151,37 +136,31 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#3cb378',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
     paddingVertical: 16,
-    paddingHorizontal: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    position: 'relative',
+    height: 60,
   },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  logo: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+  backButton: {
+    padding: 8,
     marginRight: 12,
+  },
+  headerInfo: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 1,
-  },
-  mapIconContainer: {
-    width: 32,
-    height: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginLeft:15,
   },
   content: {
     flex: 1,
@@ -201,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     marginBottom: 24,
+    marginTop:30,
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

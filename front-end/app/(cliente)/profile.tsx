@@ -3,8 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 export default function ClienteProfileScreen() {
+  const handleExit = () => {
+    router.push('/index_dev')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,12 +30,7 @@ export default function ClienteProfileScreen() {
             <Text style={styles.menuText}>Configurações</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.menuItem}>
-            <HelpCircle size={24} color="#6B7280" />
-            <Text style={styles.menuText}>Ajuda</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleExit}>
             <LogOut size={24} color="#DC2626" />
             <Text style={[styles.menuText, { color: '#DC2626' }]}>Sair</Text>
           </TouchableOpacity>

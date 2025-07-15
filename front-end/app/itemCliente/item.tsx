@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
 
 
   button: {height: 50 ,width: 150, backgroundColor: '#3bb17b', borderRadius: 15, paddingVertical: 12, marginLeft: 30, marginTop: 30},
-  buttonText: {fontFamily: 'DMSans-Medium', fontSize:18, color: 'white', alignSelf: 'center'},
+  buttonText: {fontFamily: 'DMSans-Medium', fontSize:17, color: 'white', alignSelf: 'center'},
   safeArea: {flex: 1, backgroundColor: '#fff', position: 'relative'},
 });

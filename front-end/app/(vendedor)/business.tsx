@@ -11,7 +11,7 @@ import { Store, Clock, MapPin, Phone, Mail, Settings, ChartBar as BarChart3, Pac
 import { router } from 'expo-router';
 
 const businessStats = [
-  { id: 'revenue', label: 'Receita Hoje', value: 'R$ 245,00', icon: DollarSign, color: '#10B981' },
+  { id: 'revenue', label: 'Receita Hoje (R$)', value: '245,00', icon: DollarSign, color: '#10B981' },
   { id: 'orders', label: 'Pedidos Hoje', value: '18', icon: Package, color: '#3B82F6' },
   { id: 'customers', label: 'Clientes Únicos', value: '12', icon: Users, color: '#F59E0B' },
 ];
@@ -87,14 +87,6 @@ export default function VendedorBusinessScreen() {
         <View style={styles.actionsSection}>
           <Text style={styles.sectionTitle}>AÇÕES RÁPIDAS</Text>
           
-          <TouchableOpacity style={styles.actionButton}>
-            <BarChart3 size={24} color="#3B82F6" />
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Relatórios</Text>
-              <Text style={styles.actionDescription}>Ver relatórios detalhados de vendas</Text>
-            </View>
-          </TouchableOpacity>
-
           <TouchableOpacity style={styles.actionButton} onPress={handleManageProducts}>
             <Package size={24} color="#10B981" />
             <View style={styles.actionContent}>

@@ -28,7 +28,7 @@ export default function LoginScreen() {
 
   if (in_development) {
     console.log('REDIRECIONOU')
-    return <Redirect href={'index_dev'} />;
+    return <Redirect href={'/index_dev'} />;
   }
 
   async function realizarLogin(

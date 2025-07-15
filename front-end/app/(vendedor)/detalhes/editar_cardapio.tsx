@@ -225,6 +225,10 @@ export default function EditarCardapioScreen() {
                 )}
               </View>
             ))}
+          
+          </ScrollView>
+
+          <View>
             
             {/* Add New Category Button */}
             {!showNewCategoryInput ? (
@@ -259,7 +263,7 @@ export default function EditarCardapioScreen() {
                 </TouchableOpacity>
               </View>
             )}
-          </ScrollView>
+          </View>
         </View>
 
         {/* Menu Items Section */}
@@ -448,12 +452,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 8,
-    marginTop:8,
     borderRadius: 20,
     backgroundColor: '#F0FDF4',
     borderWidth: 1,
     borderColor: '#3cb378',
     gap: 6,
+    width: 150,
+    alignSelf: 'center',
+    marginTop: 10,
+    marginLeft:10,
   },
   addCategoryText: {
     fontSize: 13,
@@ -463,8 +470,10 @@ const styles = StyleSheet.create({
   newCategoryInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop:8,
     gap: 8,
+    alignSelf: 'center',
+    marginLeft:50,
+    marginTop: 10,
   },
   newCategoryInput: {
     backgroundColor: '#FFFFFF',
