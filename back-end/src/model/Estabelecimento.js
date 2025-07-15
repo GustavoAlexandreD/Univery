@@ -28,12 +28,18 @@ const Estabelecimento = Conexao.define("Estabelecimento", {
     },
     senha: { 
         type: DataTypes.STRING 
+    },
+    ativo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true  // Por padrão, o estabelecimento está aberto
     }
 }, 
 {
   tableName: "estabelecimento",
   timestamps: false
 });
+
 
 Estabelecimento.hasMany(Pedido, { foreignKey: "id_estabelecimento" });
 Estabelecimento.hasMany(Item, { foreignKey: "id_estabelecimento" });

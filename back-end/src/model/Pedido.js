@@ -4,13 +4,18 @@ const Conexao = require('../config/conexao.js');
 const Estabelecimento = require("../model/Estabelecimento.js")
 const Pedido = require("../model/Pedido.js")
 const Estabelecimento = require("../model/EntregadorEstabelecimento.js")
-const Cliente = require("../model/EntregadorCliente.js")
+const Cliente = require("../model/Cliente.js")
 
 const Pedido = Conexao.define("Pedido", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   status: { type: DataTypes.STRING, allowNull: false },
   id_cliente: { type: DataTypes.INTEGER, allowNull: false },
-  id_estabelecimento: { type: DataTypes.INTEGER, allowNull: false }
+  id_estabelecimento: { type: DataTypes.INTEGER, allowNull: false },
+  preco_total: {  // ✅ novo campo adicionado
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0.0
+  }
 }, {
   tableName: "pedido",
   timestamps: false

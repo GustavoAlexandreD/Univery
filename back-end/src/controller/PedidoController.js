@@ -1,6 +1,6 @@
 const Pedido = require("../model/Pedido.js");
 const ErrorServices = require("../services/ErrorServices.js");
-const Cliente = require("../model/EntregadorCliente.js");
+const Cliente = require("../model/Cliente.js");
 const Estabelecimento = require("../model/Estabelecimento.js");
 const Item = require("../model/Item.js");
 const ItemPedido = require("../model/ItemPedido.js");
@@ -53,12 +53,29 @@ const PedidoController = {
         try {
             const dados = request.body;
 
+            // 1. Buscar os itens e somar os preços
+            let precoTotal = 0;
+            if (dados.itens && Array.isArray(dados.itens)) {
+                const itens = await Item.findAll({
+                    where: { id: dados.itens }
+                });
+
+                if (itens.length !== dados.itens.length) {
+                    return response.status(400).json({ erro: "Um ou mais itens não encontrados." });
+                }
+
+                precoTotal = itens.reduce((soma, item) => soma + item.preco, 0);
+            }
+
+            // 2. Criar o pedido com o preço total
             const novoPedido = await Pedido.create({
                 status: dados.status,
                 id_cliente: dados.id_cliente,
-                id_estabelecimento: dados.id_estabelecimento
+                id_estabelecimento: dados.id_estabelecimento,
+                preco_total: precoTotal
             });
 
+            // 3. Relacionar os itens ao pedido
             if (dados.itens && Array.isArray(dados.itens)) {
                 for (const id_item of dados.itens) {
                     await ItemPedido.create({

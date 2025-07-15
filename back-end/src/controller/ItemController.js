@@ -50,9 +50,19 @@ const ItemController = {
 
     criar: async (request, response) => {
         try {
-            const dados = request.body;
+            const { nome, descricao, preco, id_estabelecimento, disponibilidade } = request.body;
 
-            const novoItem = await Item.create(dados);
+            if (!nome || !preco || !id_estabelecimento) {
+                return response.status(400).json({ erro: "Campos obrigatórios: nome, preco, id_estabelecimento" });
+            }
+
+            const novoItem = await Item.create({
+                nome,
+                descricao,
+                preco,
+                id_estabelecimento,
+                disponibilidade: disponibilidade || 'disponivel'
+            });
 
             return response.json({
                 message: "Item criado com sucesso!",
@@ -66,11 +76,17 @@ const ItemController = {
     atualizar: async (request, response) => {
         try {
             const id = request.params.id;
-            const dados = request.body;
+            const { nome, descricao, preco, id_estabelecimento, disponibilidade } = request.body;
 
-            await Item.update(dados, {
-                where: { id }
-            });
+            const item = await Item.findByPk(id);
+            if (!item) {
+                return response.status(404).json({ erro: "Item não encontrado" });
+            }
+
+            await Item.update(
+                { nome, descricao, preco, id_estabelecimento, disponibilidade },
+                { where: { id } }
+            );
 
             return response.json({
                 message: "Item atualizado com sucesso!"
@@ -84,7 +100,7 @@ const ItemController = {
         try {
             const id = request.params.id;
 
-            await ItemPedido.destroy({ where: { id_item: id } }); 
+            await ItemPedido.destroy({ where: { id_item: id } });
             await Item.destroy({ where: { id } });
 
             return response.json({
@@ -115,8 +131,33 @@ const ItemController = {
         } catch (e) {
             return ErrorServices.validacaoErro("Erro ao atualizar preço.", e, response);
         }
-    }
+    },
 
+    atualizarDisponibilidade: async (request, response) => {
+        try {
+            const id = request.params.id;
+            const { disponibilidade } = request.body;
+
+            if (!['disponivel', 'esgotado'].includes(disponibilidade)) {
+                return response.status(400).json({ erro: "Valor de disponibilidade inválido. Use 'disponivel' ou 'esgotado'." });
+            }
+
+            const item = await Item.findByPk(id);
+            if (!item) {
+                return response.status(404).json({ erro: "Item não encontrado" });
+            }
+
+            item.disponibilidade = disponibilidade;
+            await item.save();
+
+            return response.json({
+                message: "Disponibilidade atualizada com sucesso!",
+                data: item
+            });
+        } catch (e) {
+            return ErrorServices.validacaoErro("Erro ao atualizar disponibilidade.", e, response);
+        }
+    }
 };
 
 module.exports = ItemController;
