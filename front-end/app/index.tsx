@@ -1,198 +1,240 @@
 import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
   Image,
-  Dimensions
+  StyleSheet,
+  Alert,
+  SafeAreaView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Redirect, router } from 'expo-router';
-import { ShoppingBag, Store, Bell } from 'lucide-react-native';
-import Header from '@/components/Header';
+import { Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import { Redirect, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Api from '../config/Api';
 
-const { width } = Dimensions.get('window');
-const in_development = false
+const in_development = true
 
+// Tipos do formulário
+type LoginFormValues = {
+  email: string;
+  senha: string;
+};
 
-export default function UserTypeSelection() {
-  const handleClientePress = () => {
-    router.push('/(cliente)');
-  };
-
-  const handleVendedorPress = () => {
-    router.push('/(vendedor)');
-  };
+export default function LoginScreen() {
+  const router = useRouter();
 
   if (in_development) {
     console.log('REDIRECIONOU')
-    return <Redirect href={'index_real'} />;
+    return <Redirect href={'index_dev'} />;
+  }
+
+  async function realizarLogin(
+    values: LoginFormValues,
+    { resetForm }: FormikHelpers<LoginFormValues>
+  ) {
+    try {
+      const response = await Api.post('/auth/login', values);
+
+      if (response.data.token) {
+        // Armazenar token com AsyncStorage
+        await AsyncStorage.setItem('token', response.data.token);
+        resetForm();
+        router.push('/(cliente)');
+      } else {
+        Alert.alert('Erro', 'Credenciais inválidas.');
+      }
+    } catch (e) {
+      console.error(e);
+      Alert.alert('Erro', 'Erro ao realizar login.');
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <Header />
-
-      <View style={styles.content}>
-        {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Bem-vindo ao UECERY</Text>
-          <Text style={styles.welcomeSubtitle}>
-            Escolha como você deseja acessar a plataforma
-          </Text>
-        </View>
-
-        {/* User Type Cards */}
-        <View style={styles.cardContainer}>
-          <TouchableOpacity 
-            style={styles.userTypeCard}
-            onPress={handleClientePress}
-            activeOpacity={0.8}
-          >
-            <View style={styles.cardIcon}>
-              <ShoppingBag size={48} color="#4ADE80" />
-            </View>
-            <Text style={styles.cardTitle}>CLIENTE</Text>
-            <Text style={styles.cardDescription}>
-              Faça pedidos e receba suas refeições no campus
-            </Text>
-            <View style={styles.cardButton}>
-              <Text style={styles.cardButtonText}>Continuar como Cliente</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.userTypeCard}
-            onPress={handleVendedorPress}
-            activeOpacity={0.8}
-          >
-            <View style={styles.cardIcon}>
-              <Store size={48} color="#F59E0B" />
-            </View>
-            <Text style={styles.cardTitle}>VENDEDOR</Text>
-            <Text style={styles.cardDescription}>
-              Gerencie seu negócio e atenda pedidos
-            </Text>
-            <View style={[styles.cardButton, styles.vendorButton]}>
-              <Text style={[styles.cardButtonText, styles.vendorButtonText]}>Continuar como Vendedor</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Footer */}
+      <View style={styles.topGreen} />
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/images/UECE_icone.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
       </View>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Plataforma de delivery universitária
+      
+      <View style={styles.curvedContent}>
+        <Text style={styles.title}>Login Cliente</Text>
+        <Text style={styles.subtitle}>
+          Informe seu nome de usuário e senha da UECE
         </Text>
+
+        <Formik<LoginFormValues>
+          initialValues={{ email: '', senha: '' }}
+          validationSchema={Yup.object({
+            email: Yup.string()
+              .required('Email obrigatório')
+              .test('email-uece', 'Use seu email @aluno.uece.br', (value) => {
+                if (!value) return false;
+                const regexEmailUECE = /^[^\s@]+@aluno\.uece\.br$/;
+                return regexEmailUECE.test(value);
+              }),
+            senha: Yup.string().required('Senha obrigatória'),
+          })}
+          onSubmit={realizarLogin}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              <Text style={styles.label}>USUÁRIO</Text>
+              <TextInput
+                style={styles.input}
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                placeholder="Ex: gustavo@aluno.uece.br"
+                placeholderTextColor="#888"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <Text style={styles.helpText}>Use seu email institucional @aluno.uece.br</Text>
+
+              <Text style={styles.label}>SENHA</Text>
+              <TextInput
+                style={styles.input}
+                secureTextEntry
+                value={values.senha}
+                onChangeText={handleChange('senha')}
+                onBlur={handleBlur('senha')}
+                placeholder="********"
+                placeholderTextColor="#888"
+              />
+              {touched.senha && errors.senha && (
+                <Text style={styles.error}>{errors.senha}</Text>
+              )}
+
+              <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
+                <Text style={styles.buttonText}>Entrar</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Text style={styles.link}>Esqueceu sua senha?</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push('/cadastro_cliente')}>
+                <Text style={styles.link}>Cadastrar-se e pedir comida!</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push('/login_restaurante')}>
+                <Text style={styles.link}>Sou restaurante</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </Formik>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-    position: 'relative'
+  container: { flex: 1, backgroundColor: '#fff' },
+  topGreen: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 280,
+    backgroundColor: '#2CA94F',
+    zIndex: 0,
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-
-  },
-  welcomeSection: {
+  logoContainer: {
     alignItems: 'center',
-    paddingTop: 25,
-    height: 150
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    right: 0,
+    zIndex: 2,
   },
-  welcomeTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1F2937',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  welcomeSubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  cardContainer: {
+  logo: { width: 120, height: 120 },
+  curvedContent: {
     flex: 1,
-    justifyContent: 'center',
-    gap: 24,
-    marginBottom: 20,
-  },
-  userTypeCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 32,
-    paddingVertical: 20,
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  cardIcon: {
-    backgroundColor: '#F0FDF4',
-    width: 40,
-    height: 40,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1F2937',
-    marginBottom: 8,
-    letterSpacing: 0.5,
-  },
-  cardDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 24,
-  },
-  cardButton: {
-    backgroundColor: '#4ADE80',
+    marginTop: 200,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
     paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 12,
-    width: '100%',
+    alignItems: 'center',
+    paddingTop: 40,
+    zIndex: 1,
   },
-  vendorButton: {
-    backgroundColor: '#F59E0B',
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#222',
+    marginBottom: 8,
   },
-  cardButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
+  subtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
     textAlign: 'center',
   },
-  vendorButtonText: {
-    color: '#FFFFFF',
+  label: {
+    alignSelf: 'flex-start',
+    fontSize: 12,
+    color: '#888',
+    marginTop: 12,
+    marginBottom: 4,
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
-  footer: {
-    height: 20,
+  input: {
+    width: '100%',
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: '#E5E5E5',
+    paddingHorizontal: 12,
+    fontSize: 16,
+    marginBottom: 4,
+    color: '#222',
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginBottom: 4,
+  },
+  helpText: {
+    color: '#666',
+    fontSize: 11,
+    alignSelf: 'flex-start',
+    marginBottom: 8,
+    fontStyle: 'italic',
+  },
+  button: {
+    width: '100%',
+    height: 44,
+    backgroundColor: '#2CA94F',
+    borderRadius: 8,
     alignItems: 'center',
-    position: 'fixed',
-    bottom: 0,
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 8,
   },
-  footerText: {
+  buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
+  link: {
+    color: '#888',
     fontSize: 14,
-    color: '#9CA3AF',
+    marginTop: 8,
     textAlign: 'center',
   },
 });
