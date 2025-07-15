@@ -1,7 +1,5 @@
 const DataTypes  = require('sequelize');
 const Conexao = require('../config/conexao.js');
-const EntregadorEstabelecimento = require("../model/EntregadorEstabelecimento.js")
-const Pedido = require("../model/Pedido.js")
 
 const Cliente = Conexao.define(
     "Cliente", 
@@ -35,10 +33,4 @@ const Cliente = Conexao.define(
             timestamps: false
         });
 
-Cliente.hasMany(Pedido, { foreignKey: "id_cliente" });
-Cliente.belongsToMany(Estabelecimento, {
-  through: EntregadorEstabelecimento,
-  foreignKey: "id_entregador",
-  otherKey: "id_estabelecimento"
-});
 module.exports = Cliente;

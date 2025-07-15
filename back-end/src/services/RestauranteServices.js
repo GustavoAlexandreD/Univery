@@ -1,4 +1,4 @@
-const RestauranteModel = require("../model/RestauranteModel");
+const Estabelecimento = require("../model/Estabelecimento");
 
 const RestaurantesServices = {
 
@@ -15,7 +15,7 @@ const RestaurantesServices = {
         }
 
         // Verifica se o CNPJ já está cadastrado
-        const cnpjExistente = await RestauranteModel.findOne({
+        const cnpjExistente = await Estabelecimento.findOne({
             where: { cnpj: dados.cnpj }
         });
         if (cnpjExistente) {
@@ -28,7 +28,7 @@ const RestaurantesServices = {
         }
 
         // Verifica se o e-mail já está em uso
-        const emailExistente = await RestauranteModel.findOne({
+        const emailExistente = await Estabelecimento.findOne({
             where: { email: dados.email }
         });
         if (emailExistente) {

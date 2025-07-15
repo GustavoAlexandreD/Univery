@@ -5,13 +5,14 @@ require('dotenv').config();
 // Importar conexão com banco
 const Conexao = require('./config/conexao');
 
-// Importar controllers
-const ClienteController = require('./controller/ClienteController');
-const RestauranteController = require('./controller/RestauranteController');
-const AutorizacaoController = require('./controller/AutorizacaoController');
-
-// Importar middleware de autenticação (quando implementado)
-// const AutenticacaoMiddleware = require('./middleware/AutenticacaoMiddleware');
+// Importar rotas
+const ClienteRoute = require('./routes/ClienteRoute');
+const RestauranteRoute = require('./routes/RestauranteRoute');
+const ItemRoute = require('./routes/ItemRoute');
+const PedidoRoute = require('./routes/PedidoRoute');
+const ItemPedidoRoute = require('./routes/ItemPedidoRoute');
+const EntregadorEstabRoute = require('./routes/EntregadorEstabRoute');
+const AuthRoute = require('./routes/AuthRoute');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,24 +36,14 @@ app.get('/', (req, res) => {
     });
 });
 
-// ==================== ROTAS DE AUTENTICAÇÃO ====================
-app.post('/auth/login', AutorizacaoController.login);
-
-// ==================== ROTAS DE CLIENTES ====================
-app.get('/clientes', ClienteController.listar);
-app.get('/clientes/:id', ClienteController.consultarPorID);
-app.post('/clientes', ClienteController.criar);
-app.put('/clientes/:id', ClienteController.atualizar);
-app.delete('/clientes/:id', ClienteController.deletar);
-app.patch('/clientes/:id/entregador', ClienteController.atualizarEntregador);
-
-// ==================== ROTAS DE RESTAURANTES ====================
-app.get('/restaurantes', RestauranteController.listar);
-app.get('/restaurantes/:id', RestauranteController.consultarPorID);
-app.post('/restaurantes', RestauranteController.criar);
-app.put('/restaurantes/:id', RestauranteController.atualizar);
-app.delete('/restaurantes/:id', RestauranteController.deletar);
-app.patch('/restaurantes/:id/status', RestauranteController.atualizarStatus);
+// ==================== CONFIGURAÇÃO DAS ROTAS ====================
+app.use('/auth', AuthRoute);
+app.use('/clientes', ClienteRoute);
+app.use('/restaurantes', RestauranteRoute);
+app.use('/itens', ItemRoute);
+app.use('/pedidos', PedidoRoute);
+app.use('/item-pedido', ItemPedidoRoute);
+app.use('/entregador-estabelecimento', EntregadorEstabRoute);
 
 // ==================== MIDDLEWARE DE ERRO ====================
 app.use((err, req, res, next) => {

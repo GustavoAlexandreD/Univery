@@ -2,16 +2,17 @@ const ClienteModel = require("../model/ClienteModel");
 const ErrorServices = require("../services/ErrorServices");
 const ClientesServices = require("../services/ClientesServices");
 const Helpers = require('../config/Helpers.js');
+const Cliente = require("../model/Cliente");
 
 const ClienteController = {
     listar: async (request, response) => {
-        const dados = await ClienteModel.findAll();
+        const dados = await Cliente.findAll();
         return response.json(dados);
     },
 
     consultarPorID: async (request, response) => {
         const id = request.params.id;
-        const dados = await ClienteModel.findByPk(id);
+        const dados = await Cliente.findByPk(id);
         return response.json(dados);
     },
 
@@ -21,7 +22,7 @@ const ClienteController = {
             dados.senha = Helpers.crypto(dados.senha);
 
             await ClientesServices.validandoCliente(dados);
-            await ClienteModel.create(dados);
+            await Cliente.create(dados);
 
             return response.json({
                 message: "Cliente criado com sucesso!",
@@ -40,44 +41,44 @@ const ClienteController = {
             dados.senha = Helpers.crypto(dados.senha);
         }
 
-        await ClienteModel.update(dados, {
+        await Cliente.update(dados, {
             where: { id }
         });
 
-        return res.json({
+        return response.json({
             message: "Cliente atualizado com sucesso!"
         });
     },
 
     deletar: async (request, response) => {
-        const id = req.params.id;
+        const id = request.params.id;
 
-        await ClienteModel.destroy({ where: { id } });
+        await Cliente.destroy({ where: { id } });
 
-        return res.json({
+        return response.json({
             message: "Cliente deletado com sucesso!"
         });
     },
 
     atualizarEntregador: async (request, response) => {
         try {
-            const id = req.params.id;
-            const { entregador } = req.body;
+            const id = request.params.id;
+            const { entregador } = request.body;
 
-            const cliente = await ClienteModel.findByPk(id);
+            const cliente = await Cliente.findByPk(id);
             if (!cliente) {
-                return res.status(404).json({ erro: 'Cliente não encontrado' });
+                return response.status(404).json({ erro: 'Cliente não encontrado' });
             }
 
             cliente.entregador = entregador;
             await cliente.save();
 
-            return res.json({
+            return response.json({
                 message: "Status de entregador atualizado com sucesso!",
                 data: cliente
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao atualizar entregador.", e, res);
+            return ErrorServices.validacaoErro("Erro ao atualizar entregador.", e, response);
         }
     }
 };

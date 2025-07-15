@@ -1,4 +1,4 @@
-const RestauranteModel = require("../model/RestauranteModel");
+const Estabelecimento = require("../model/Estabelecimento");
 const ErrorServices = require("../services/ErrorServices.js");
 const RestaurantesServices = require("../services/RestaurantesServices");
 const Helpers = require('../config/Helpers.js');
@@ -6,13 +6,13 @@ const Helpers = require('../config/Helpers.js');
 const RestauranteController = {
 
     listar: async (request, response) => {
-        const dados = await RestauranteModel.findAll();
+        const dados = await Estabelecimento.findAll();
         return response.json(dados);
     },
 
     consultarPorID: async (request, response) => {
         const id = request.params.id;
-        const dados = await RestauranteModel.findByPk(id);
+        const dados = await Estabelecimento.findByPk(id);
         return response.json(dados);
     },
 
@@ -22,7 +22,7 @@ const RestauranteController = {
             dados.senha = Helpers.crypto(dados.senha);
 
             await RestaurantesServices.validandoRestaurante(dados);
-            await RestauranteModel.create(dados);
+            await Estabelecimento.create(dados);
 
             return response.json({
                 message: "Restaurante criado com sucesso!",
@@ -41,7 +41,7 @@ const RestauranteController = {
             dados.senha = Helpers.crypto(dados.senha);
         }
 
-        await RestauranteModel.update(dados, {
+        await Estabelecimento.update(dados, {
             where: { id }
         });
 
@@ -53,7 +53,7 @@ const RestauranteController = {
     deletar: async (request, response) => {
         const id = request.params.id;
 
-        await RestauranteModel.destroy({
+        await Estabelecimento.destroy({
             where: { id }
         });
 
@@ -67,7 +67,7 @@ const RestauranteController = {
             const id = request.params.id;
             const { ativo } = request.body;
 
-            const restaurante = await RestauranteModel.findByPk(id);
+            const restaurante = await Estabelecimento.findByPk(id);
             if (!restaurante) {
                 return response.status(404).json({ erro: 'Restaurante não encontrado' });
             }

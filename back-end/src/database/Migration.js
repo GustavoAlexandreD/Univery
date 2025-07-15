@@ -8,11 +8,65 @@ const Pedido = require('../model/Pedido');
 const ItemPedido = require('../model/ItemPedido');
 const EntregadorEstabelecimento = require('../model/EntregadorEstabelecimento');
 
+// Definir associações após importar todos os modelos
+const definirAssociacoes = () => {
+    // Cliente - Pedido
+    Cliente.hasMany(Pedido, { foreignKey: "id_cliente" });
+    Pedido.belongsTo(Cliente, { foreignKey: "id_cliente" });
+
+    // Estabelecimento - Pedido
+    Estabelecimento.hasMany(Pedido, { foreignKey: "id_estabelecimento" });
+    Pedido.belongsTo(Estabelecimento, { foreignKey: "id_estabelecimento" });
+
+    // Estabelecimento - Item
+    Estabelecimento.hasMany(Item, { foreignKey: "id_estabelecimento" });
+    Item.belongsTo(Estabelecimento, { foreignKey: "id_estabelecimento" });
+
+    // Item - Pedido (Many-to-Many através de ItemPedido)
+    Item.belongsToMany(Pedido, {
+        through: ItemPedido,
+        foreignKey: "id_item",
+        otherKey: "id_pedido"
+    });
+    Pedido.belongsToMany(Item, {
+        through: ItemPedido,
+        foreignKey: "id_pedido",
+        otherKey: "id_item"
+    });
+
+    // ItemPedido - Item e Pedido
+    ItemPedido.belongsTo(Item, { foreignKey: "id_item" });
+    ItemPedido.belongsTo(Pedido, { foreignKey: "id_pedido" });
+    Item.hasMany(ItemPedido, { foreignKey: "id_item" });
+    Pedido.hasMany(ItemPedido, { foreignKey: "id_pedido" });
+
+    // Cliente (Entregador) - Estabelecimento (Many-to-Many através de EntregadorEstabelecimento)
+    Cliente.belongsToMany(Estabelecimento, {
+        through: EntregadorEstabelecimento,
+        foreignKey: "id_entregador",
+        otherKey: "id_estabelecimento"
+    });
+    Estabelecimento.belongsToMany(Cliente, {
+        through: EntregadorEstabelecimento,
+        foreignKey: "id_estabelecimento",
+        otherKey: "id_entregador"
+    });
+
+    // EntregadorEstabelecimento - Cliente e Estabelecimento
+    EntregadorEstabelecimento.belongsTo(Cliente, { foreignKey: "id_entregador" });
+    EntregadorEstabelecimento.belongsTo(Estabelecimento, { foreignKey: "id_estabelecimento" });
+    Cliente.hasMany(EntregadorEstabelecimento, { foreignKey: "id_entregador" });
+    Estabelecimento.hasMany(EntregadorEstabelecimento, { foreignKey: "id_estabelecimento" });
+};
+
 const Migration = {
     // Criar todas as tabelas
     criarTabelas: async () => {
         try {
             console.log('🔄 Iniciando criação das tabelas...');
+            
+            // Definir associações antes de sincronizar
+            definirAssociacoes();
             
             // Sincronizar modelos com o banco (force: true apaga e recria as tabelas)
             await Conexao.sync({ force: false, alter: true });
@@ -28,6 +82,9 @@ const Migration = {
     resetarBanco: async () => {
         try {
             console.log('⚠️  ATENÇÃO: Resetando banco de dados...');
+            
+            // Definir associações antes de resetar
+            definirAssociacoes();
             
             await Conexao.sync({ force: true });
             
@@ -61,7 +118,7 @@ const Migration = {
                 defaults: {
                     nome: 'Cliente Exemplo',
                     email: 'cliente@aluno.uece.br',
-                    senha: 'senhaHasheada', // Lembre-se de usar hash real
+                    senha: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', // Hash SHA256 de "hello"
                     telefone: '85999999999',
                     tipo: 'cliente'
                 }
@@ -75,7 +132,7 @@ const Migration = {
                     cnpj: '12345678901234',
                     telefone: '85888888888',
                     email: 'lanchonete@campus.edu.br',
-                    senha: 'senhaHasheada'
+                    senha: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
                 }
             });
 
@@ -90,6 +147,7 @@ const Migration = {
 if (require.main === module) {
     const executarMigration = async () => {
         try {
+            definirAssociacoes();
             await Migration.verificarConexao();
             await Migration.criarTabelas();
             await Migration.inserirDadosExemplo();
