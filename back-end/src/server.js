@@ -6,13 +6,14 @@ require('./model/associacoes');
 // Importar conexão com banco
 const Conexao = require('./config/conexao');
 
-// Importar controllers
-const ClienteController = require('./controller/ClienteController');
-const Estabelecimento = require('./controller/EstabelecimentoController');
-const AutorizacaoController = require('./controller/AutorizacaoController');
-
-// Importar middleware de autenticação (quando implementado)
-// const AutenticacaoMiddleware = require('./middleware/AutenticacaoMiddleware');
+// Importar rotas
+const ClienteRoute = require('./routes/ClienteRoute');
+const EstabelecimentoRoute = require('./routes/EstabelecimentoRoute');
+const ItemRoute = require('./routes/ItemRoute');
+const PedidoRoute = require('./routes/PedidoRoute');
+const ItemPedidoRoute = require('./routes/ItemPedidoRoute');
+const EntregadorEstabRoute = require('./routes/EntregadorEstabRoute');
+const AutorizacaoRoute = require('./routes/AutorizacaoRoute');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -37,23 +38,15 @@ app.get('/', (req, res) => {
 });
 
 // ==================== ROTAS DE AUTENTICAÇÃO ====================
-app.post('/auth/login', AutorizacaoController.login);
+app.use('/auth', AutorizacaoRoute);
 
-// ==================== ROTAS DE CLIENTES ====================
-app.get('/clientes', ClienteController.listar);
-app.get('/clientes/:id', ClienteController.consultarPorID);
-app.post('/clientes', ClienteController.criar);
-app.put('/clientes/:id', ClienteController.atualizar);
-app.delete('/clientes/:id', ClienteController.deletar);
-app.patch('/clientes/:id/entregador', ClienteController.atualizarEntregador);
-
-// ==================== ROTAS DE RESTAURANTES ====================
-app.get('/estabelecimentos', Estabelecimento.listar);
-app.get('/estabelecimentos/:id', Estabelecimento.consultarPorID);
-app.post('/estabelecimentos', Estabelecimento.criar);
-app.put('/estabelecimentos/:id', Estabelecimento.atualizar);
-app.delete('/estabelecimentos/:id', Estabelecimento.deletar);
-app.patch('/estabelecimentos/:id/status', Estabelecimento.atualizarStatus);
+// ==================== ROTAS PRINCIPAIS ====================
+app.use('/clientes', ClienteRoute);
+app.use('/estabelecimentos', EstabelecimentoRoute);
+app.use('/itens', ItemRoute);
+app.use('/pedidos', PedidoRoute);
+app.use('/item-pedido', ItemPedidoRoute);
+app.use('/entregador-estabelecimento', EntregadorEstabRoute);
 
 // ==================== MIDDLEWARE DE ERRO ====================
 app.use((err, req, res, next) => {
