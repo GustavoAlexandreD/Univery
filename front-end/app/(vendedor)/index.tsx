@@ -56,7 +56,7 @@ export default function VendedorDashboard() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <HeaderEstablishment />
 
@@ -133,7 +133,7 @@ export default function VendedorDashboard() {
         {/* Bottom Spacing */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

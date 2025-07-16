@@ -31,7 +31,7 @@ export default function UserTypeSelection() {
       <View style={styles.content}>
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Bem-vindo ao UECERY</Text>
+          <Text style={styles.welcomeTitle}>Bem-vindo ao Univery</Text>
           <Text style={styles.welcomeSubtitle}>
             Escolha como você deseja acessar a plataforma
           </Text>

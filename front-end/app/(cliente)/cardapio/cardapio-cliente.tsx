@@ -58,7 +58,6 @@ const menuItemsTeste: MenuItem[] = [
 ];
 
 const categories = ['Todos', 'Tapiocas', 'Sucos'];
-const {restauranteId} = useLocalSearchParams()
 
 
 export default function CardapioClienteScreen() {
@@ -75,18 +74,19 @@ export default function CardapioClienteScreen() {
 
 
   useEffect(() => {
-  // Faça a requisição ao backend
-  fetch(`http://192.168.0.10:3000/restaurantes/${restauranteId}`) // use seu IP local em vez de localhost
-    .then((response) => response.json())
-    .then((data) => {
-      setMenuItems(data); // Atualiza os restaurantes com os dados da API
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error('Erro ao buscar restaurantes:', error);
-      setLoading(false);
-    });
-  }, []);
+    if (!restaurantId) return;
+    // Faça a requisição ao backend
+    fetch(`http://192.168.0.10:3000/restaurantes/${restaurantId}`) // use seu IP local em vez de localhost
+      .then((response) => response.json())
+      .then((data) => {
+        setMenuItems(data); // Atualiza os restaurantes com os dados da API
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar restaurantes:', error);
+        setLoading(false);
+      });
+  }, [restaurantId]);
 
 
   const handleBack = () => {
@@ -143,18 +143,6 @@ export default function CardapioClienteScreen() {
         delete newCart[itemId];
       }
       return newCart;
-    });
-  };
-
-  const toggleFavorite = (itemId: string) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(itemId)) {
-        newFavorites.delete(itemId);
-      } else {
-        newFavorites.add(itemId);
-      }
-      return newFavorites;
     });
   };
 
@@ -237,8 +225,8 @@ export default function CardapioClienteScreen() {
           <Text style={styles.sectionTitle}>{selectedCategory}</Text>
           
           {filteredItems.map((item) => (
-        <TouchableOpacity onPress={() => handleItemClick(item)} >
-            <View key={item.id} style={styles.menuItemCompact}>
+        <TouchableOpacity key={item.id} onPress={() => handleItemClick(item)} >
+            <View style={styles.menuItemCompact}>
                 <Image
                     source={{ uri: item.image }}
                     style={styles.menuItemCompactImage}
@@ -247,13 +235,7 @@ export default function CardapioClienteScreen() {
                 <View style={styles.menuItemCompactContent}>
                     <View style={styles.menuItemCompactHeader}>
                     <Text style={styles.menuItemName}>{item.name}</Text>
-                    <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
-                        <Heart
-                        size={20}
-                        color={favorites.has(item.id) ? "#EF4444" : "#9CA3AF"}
-                        fill={favorites.has(item.id) ? "#EF4444" : "transparent"}
-                        />
-                    </TouchableOpacity>
+
                     </View>
                     <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
                     <Text style={styles.menuItemDescription} numberOfLines={1}>

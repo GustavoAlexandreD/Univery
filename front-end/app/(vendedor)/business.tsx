@@ -22,7 +22,7 @@ export default function VendedorBusinessScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>MEU NEGÓCIO</Text>
@@ -125,7 +125,7 @@ export default function VendedorBusinessScreen() {
 
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -47,7 +47,7 @@ export default function VendedorOrdersScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>GERENCIAR PEDIDOS</Text>
@@ -155,7 +155,7 @@ export default function VendedorOrdersScreen() {
 
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
