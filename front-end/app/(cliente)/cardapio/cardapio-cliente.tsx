@@ -6,132 +6,162 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Image,
-  TextInput
+  TextInput,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, Search, Heart, Plus, Minus, ShoppingCart } from 'lucide-react-native';
 
 import { currentItemStore } from '@/stores/currentItemStore'; 
+import Api from '@/config/Api';
 
 interface MenuItem {
   id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
+  nome: string;
+  descricao: string;
+  preco: number;
+  image?: string;
+  categoria?: string;
+  disponibilidade: 'disponivel' | 'esgotado';
+  id_estabelecimento: string;
 }
 
-const menuItemsTeste: MenuItem[] = [
-  {
-    id: '1',
-    name: 'Tapioca com Queijo',
-    description: 'Tapioca tradicional recheada com queijo coalho derretido',
-    price: 5.00,
-    image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300',
-    category: 'Tapiocas'
-  },
-  {
-    id: '2',
-    name: 'Tapioca com Frango',
-    description: 'Tapioca com frango desfiado temperado e queijo',
-    price: 8.00,
-    image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300',
-    category: 'Tapiocas'
-  },
-  {
-    id: '3',
-    name: 'Suco de Cajá 300ml',
-    description: 'Suco natural de cajá gelado',
-    price: 3.50,
-    image: 'https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&w=300',
-    category: 'Sucos'
-  },
-  {
-    id: '4',
-    name: 'Suco de Uva 300ml',
-    description: 'Suco natural de uva gelado',
-    price: 4.00,
-    image: 'https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&w=300',
-    category: 'Sucos'
-  }
-];
-
-const categories = ['Todos', 'Tapiocas', 'Sucos'];
-
+interface Estabelecimento {
+  id: string;
+  nome: string;
+  telefone?: string;
+  email?: string;
+  ativo: boolean;
+}
 
 export default function CardapioClienteScreen() {
   const { restaurantId, restaurantName } = useLocalSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<{[key: string]: number}>({});
-
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [menuItems, setMenuItems] = useState(menuItemsTeste)
-  const [loading, setLoading] = useState(false);
+  
+  // Estados para dados do backend
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [categories, setCategories] = useState<string[]>(['Todos']);
+  const [estabelecimento, setEstabelecimento] = useState<Estabelecimento | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const {currentItem, setCurrentItem} = currentItemStore()
-
+  const { currentItem, setCurrentItem } = currentItemStore();
 
   useEffect(() => {
-    if (!restaurantId) return;
+    if (!restaurantId) {
+      setError('ID do restaurante não fornecido');
+      setLoading(false);
+      return;
+    }
     
-    const fetchMenuItems = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(false);
-        // Por enquanto, vamos usar os dados de teste
-        // Quando você implementar o endpoint de itens, substitua por:
-        // const response = await Api.get(`/itens?estabelecimento=${restaurantId}`);
-        // setMenuItems(response.data);
+        setLoading(true);
+        setError(null);
         
-        console.log('Carregando cardápio para restaurante:', restaurantId);
-        setMenuItems(menuItemsTeste);
-      } catch (error) {
-        console.error('Erro ao buscar restaurantes:', error);
+        // Buscar dados do estabelecimento
+        const estabelecimentoResponse = await Api.get(`/estabelecimentos/${restaurantId}`);
+        if (estabelecimentoResponse.data) {
+          setEstabelecimento(estabelecimentoResponse.data);
+        }
+
+        // Buscar itens do estabelecimento
+        const itensResponse = await Api.get('/itens');
+        
+        if (itensResponse.data && Array.isArray(itensResponse.data)) {
+          // Filtrar itens apenas do estabelecimento atual
+          const itensDoEstabelecimento = itensResponse.data.filter(
+            (item: any) => item.id_estabelecimento?.toString() === restaurantId?.toString()
+          );
+
+          // Mapear os dados para o formato esperado pelo frontend
+          const itensFormatados: MenuItem[] = itensDoEstabelecimento.map((item: any) => ({
+            id: item.id?.toString() || '',
+            nome: item.nome || 'Item sem nome',
+            descricao: item.descricao || 'Descrição não disponível',
+            preco: parseFloat(item.preco) || 0,
+            image: item.image || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300',
+            categoria: item.categoria || 'Outros',
+            disponibilidade: item.disponibilidade || 'disponivel',
+            id_estabelecimento: item.id_estabelecimento?.toString() || ''
+          }));
+
+          setMenuItems(itensFormatados);
+
+          // Extrair categorias únicas dos itens
+          const categoriasUnicas = ['Todos', ...new Set(
+            itensFormatados.map(item => item.categoria).filter(Boolean)
+          )];
+          setCategories(categoriasUnicas);
+
+          // Se não há categoria selecionada ou a categoria não existe, selecionar a primeira disponível
+          if (!categoriasUnicas.includes(selectedCategory)) {
+            setSelectedCategory(categoriasUnicas[0] || 'Todos');
+          }
+        } else {
+          setMenuItems([]);
+          setCategories(['Todos']);
+        }
+        
+      } catch (error: any) {
+        console.error('Erro ao buscar dados:', error);
+        
+        if (error.response) {
+          setError(`Erro do servidor: ${error.response.status}`);
+        } else if (error.request) {
+          setError('Erro de conexão. Verifique sua internet e se o servidor está rodando.');
+        } else {
+          setError('Erro inesperado ao carregar cardápio');
+        }
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchMenuItems();
+    fetchData();
   }, [restaurantId]);
-
 
   const handleBack = () => {
     router.back();
   };
 
-  const handleItemClick = (item: any) => {
-      console.log(item)
-      setCurrentItem(item)
-      router.push("../../itemCliente/item")
-  }
+  const handleItemClick = (item: MenuItem) => {
+    console.log('Item selecionado:', item);
+    setCurrentItem(item);
+    router.push("../../itemCliente/item");
+  };
 
   const handleOrder = () => {
-  const orderItems = Object.entries(cart).map(([itemId, quantity]) => {
-    const item = menuItems.find(item => item.id === itemId);
-    if (!item) return null;
-    return {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity,
-      total: item.price * quantity,
-    };
-  }).filter(Boolean); 
+    const orderItems = Object.entries(cart).map(([itemId, quantity]) => {
+      const item = menuItems.find(item => item.id === itemId);
+      if (!item) return null;
+      return {
+        id: item.id,
+        name: item.nome,
+        price: item.preco,
+        quantity,
+        total: item.preco * quantity,
+      };
+    }).filter(Boolean); 
 
-   router.push({
-    pathname: '/(cliente)/cardapio/finalizar-pedido',
-    params: {
-      order: JSON.stringify(orderItems),
-    },
-  });
-};
+    router.push({
+      pathname: '/(cliente)/cardapio/finalizar-pedido',
+      params: {
+        order: JSON.stringify(orderItems),
+      },
+    });
+  };
 
   const filteredItems = menuItems.filter(item => {
-    const matchesCategory = selectedCategory === 'Todos' || item.category === selectedCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchesCategory = selectedCategory === 'Todos' || item.categoria === selectedCategory;
+    const matchesSearch = item.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.descricao.toLowerCase().includes(searchQuery.toLowerCase());
+    const isAvailable = item.disponibilidade === 'disponivel';
+    return matchesCategory && matchesSearch && isAvailable;
   });
 
   const addToCart = (itemId: string) => {
@@ -160,125 +190,251 @@ export default function CardapioClienteScreen() {
   const getTotalPrice = () => {
     return Object.entries(cart).reduce((total, [itemId, quantity]) => {
       const item = menuItems.find(item => item.id === itemId);
-      return total + (item ? item.price * quantity : 0);
+      return total + (item ? item.preco * quantity : 0);
     }, 0);
   };
 
+  const handleRetry = () => {
+    if (restaurantId) {
+      setError(null);
+      // Re-executar o useEffect
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          
+          const estabelecimentoResponse = await Api.get(`/estabelecimentos/${restaurantId}`);
+          if (estabelecimentoResponse.data) {
+            setEstabelecimento(estabelecimentoResponse.data);
+          }
+
+          const itensResponse = await Api.get('/itens');
+          
+          if (itensResponse.data && Array.isArray(itensResponse.data)) {
+            const itensDoEstabelecimento = itensResponse.data.filter(
+              (item: any) => item.id_estabelecimento?.toString() === restaurantId?.toString()
+            );
+
+            const itensFormatados: MenuItem[] = itensDoEstabelecimento.map((item: any) => ({
+              id: item.id?.toString() || '',
+              nome: item.nome || 'Item sem nome',
+              descricao: item.descricao || 'Descrição não disponível',
+              preco: parseFloat(item.preco) || 0,
+              image: item.image || 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300',
+              categoria: item.categoria || 'Outros',
+              disponibilidade: item.disponibilidade || 'disponivel',
+              id_estabelecimento: item.id_estabelecimento?.toString() || ''
+            }));
+
+            setMenuItems(itensFormatados);
+
+            const categoriasUnicas = ['Todos', ...new Set(
+              itensFormatados.map(item => item.categoria).filter(Boolean)
+            )];
+            setCategories(categoriasUnicas);
+
+            if (!categoriasUnicas.includes(selectedCategory)) {
+              setSelectedCategory(categoriasUnicas[0] || 'Todos');
+            }
+          } else {
+            setMenuItems([]);
+            setCategories(['Todos']);
+          }
+          
+        } catch (error: any) {
+          console.error('Erro ao buscar dados:', error);
+          
+          if (error.response) {
+            setError(`Erro do servidor: ${error.response.status}`);
+          } else if (error.request) {
+            setError('Erro de conexão. Verifique sua internet e se o servidor está rodando.');
+          } else {
+            setError('Erro inesperado ao carregar cardápio');
+          }
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    }
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ArrowLeft size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <View style={styles.headerInfo}>
+            <Text style={styles.headerTitle}>Carregando...</Text>
+          </View>
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3cb378" />
+          <Text style={styles.loadingText}>Carregando cardápio...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ArrowLeft size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <View style={styles.headerInfo}>
+            <Text style={styles.headerTitle}>Erro</Text>
+          </View>
+        </View>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Ops! Algo deu errado</Text>
+          <Text style={styles.errorMessage}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
+            <Text style={styles.retryButtonText}>Tentar Novamente</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {/* Header */}<ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <ArrowLeft size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <View style={styles.headerInfo}>
-          <Text style={styles.headerTitle}>{restaurantName || 'UECEANA'}</Text>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <ArrowLeft size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <View style={styles.headerInfo}>
+            <Text style={styles.headerTitle}>
+              {estabelecimento?.nome || restaurantName || 'Restaurante'}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      {/* Hero Image */}
-      <View style={styles.heroContainer}>
-        <Image
-          source={{ uri: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800' }}
-          style={styles.heroImage}
-          resizeMode="cover"
-        />
-        <View style={styles.heroOverlay}>
-          <Text style={styles.heroTitle}>UECEANA</Text>
-          <Text style={styles.heroSubtitle}>Come in and discover your new favorite comfort food - made just for you!</Text>
-        </View>
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Search size={20} color="#9CA3AF" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Pesquise por item do cardápio"
-            placeholderTextColor="#9CA3AF"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
+        {/* Hero Image */}
+        <View style={styles.heroContainer}>
+          <Image
+            source={{ uri: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800' }}
+            style={styles.heroImage}
+            resizeMode="cover"
           />
+          <View style={styles.heroOverlay}>
+            <Text style={styles.heroTitle}>
+              {estabelecimento?.nome || restaurantName || 'Restaurante'}
+            </Text>
+            <Text style={styles.heroSubtitle}>
+              Descubra sabores únicos feitos especialmente para você!
+            </Text>
+          </View>
         </View>
-      </View>
 
-      {/* Category Filter */}
-      <View style={styles.categoryContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScrollContainer}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category}
-              style={[
-                styles.categoryButton,
-                selectedCategory === category && styles.selectedCategoryButton
-              ]}
-              onPress={() => setSelectedCategory(category)}
-            >
-              <Text style={[
-                styles.categoryButtonText,
-                selectedCategory === category && styles.selectedCategoryButtonText
-              ]}>
-                {category}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBar}>
+            <Search size={20} color="#9CA3AF" />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Pesquise por item do cardápio"
+              placeholderTextColor="#9CA3AF"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
+        </View>
 
-      {/* Menu Items */}
-      
+        {/* Category Filter */}
+        <View style={styles.categoryContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScrollContainer}>
+            {categories.map((category) => (
+              <TouchableOpacity
+                key={category}
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === category && styles.selectedCategoryButton
+                ]}
+                onPress={() => setSelectedCategory(category)}
+              >
+                <Text style={[
+                  styles.categoryButtonText,
+                  selectedCategory === category && styles.selectedCategoryButtonText
+                ]}>
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Menu Items */}
         <View style={styles.menuContainer}>
           <Text style={styles.sectionTitle}>{selectedCategory}</Text>
           
-          {filteredItems.map((item) => (
-        <TouchableOpacity key={item.id} onPress={() => handleItemClick(item)} >
-            <View style={styles.menuItemCompact}>
-                <Image
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
+              <TouchableOpacity key={item.id} onPress={() => handleItemClick(item)}>
+                <View style={styles.menuItemCompact}>
+                  <Image
                     source={{ uri: item.image }}
                     style={styles.menuItemCompactImage}
                     resizeMode="cover"
-                />
-                <View style={styles.menuItemCompactContent}>
+                  />
+                  <View style={styles.menuItemCompactContent}>
                     <View style={styles.menuItemCompactHeader}>
-                    <Text style={styles.menuItemName}>{item.name}</Text>
-
+                      <Text style={styles.menuItemName}>{item.nome}</Text>
                     </View>
-                    <Text style={styles.menuItemPrice}>R$ {item.price.toFixed(2)}</Text>
+                    <Text style={styles.menuItemPrice}>R$ {item.preco.toFixed(2)}</Text>
                     <Text style={styles.menuItemDescription} numberOfLines={1}>
-                    {item.description}
+                      {item.descricao}
                     </Text>
-                </View>
+                  </View>
 
-                <View style={styles.quantityControlsCompact}>
+                  <View style={styles.quantityControlsCompact}>
                     {cart[item.id] ? (
-                    <>
+                      <>
                         <TouchableOpacity
-                        style={styles.quantityButton}
-                        onPress={() => removeFromCart(item.id)}
+                          style={styles.quantityButton}
+                          onPress={() => removeFromCart(item.id)}
                         >
-                        <Minus size={16} color="#FFFFFF" />
+                          <Minus size={16} color="#FFFFFF" />
                         </TouchableOpacity>
                         <Text style={styles.quantityText}>{cart[item.id]}</Text>
                         <TouchableOpacity
-                        style={styles.quantityButton}
-                        onPress={() => addToCart(item.id)}
+                          style={styles.quantityButton}
+                          onPress={() => addToCart(item.id)}
                         >
-                        <Plus size={16} color="#FFFFFF" />
+                          <Plus size={16} color="#FFFFFF" />
                         </TouchableOpacity>
-                    </>
+                      </>
                     ) : (
-                    <TouchableOpacity
+                      <TouchableOpacity
                         style={styles.addButton}
                         onPress={() => addToCart(item.id)}
-                    >
+                      >
                         <Text style={styles.addButtonText}>Adicionar</Text>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
                     )}
+                  </View>
                 </View>
-                </View>
-        </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            ))
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyTitle}>Nenhum item encontrado</Text>
+              <Text style={styles.emptyMessage}>
+                {searchQuery 
+                  ? 'Tente pesquisar por outro termo'
+                  : 'Não há itens disponíveis nesta categoria no momento'
+                }
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.bottomSpacing} />
@@ -300,8 +456,7 @@ export default function CardapioClienteScreen() {
             </View>
           </View>
           
-          <TouchableOpacity style={styles.checkoutButton}
-           onPress={() => handleOrder()}>
+          <TouchableOpacity style={styles.checkoutButton} onPress={() => handleOrder()}>
             <Text style={styles.checkoutButtonText}>Ver Carrinho</Text>
           </TouchableOpacity>
         </View>
@@ -341,12 +496,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 1,
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    opacity: 0.9,
-    marginTop: 2,
   },
   heroContainer: {
     height: 200,
@@ -440,29 +589,33 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     marginBottom: 20,
   },
-  menuItem: {
+  menuItemCompact: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    marginBottom: 16,
-    elevation: 3,
+    marginBottom: 12,
+    padding: 12,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    overflow: 'hidden',
+    shadowRadius: 2,
+    gap: 12,
   },
-  menuItemImage: {
-    width: '100%',
-    height: 120,
+  menuItemCompactImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F3F4F6',
   },
-  menuItemContent: {
-    padding: 16,
+  menuItemCompactContent: {
+    flex: 1,
   },
-  menuItemHeader: {
+  menuItemCompactHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
+    alignItems: 'center',
   },
   menuItemName: {
     fontSize: 18,
@@ -471,24 +624,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
-  favoriteButton: {
-    padding: 4,
-  },
   menuItemDescription: {
     fontSize: 14,
     color: '#6B7280',
     lineHeight: 20,
     marginBottom: 16,
   },
-  menuItemFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   menuItemPrice: {
     fontSize: 18,
     fontWeight: '700',
     color: '#24a637',
+  },
+  quantityControlsCompact: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   quantityControls: {
     flexDirection: 'row',
@@ -592,41 +742,65 @@ const styles = StyleSheet.create({
   bottomSpacing: {
     height: 20,
   },
-  menuItemCompact: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#FFFFFF',
-  borderRadius: 16,
-  marginBottom: 12,
-  padding: 12,
-  elevation: 2,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.1,
-  shadowRadius: 2,
-  gap: 12,
-},
-menuItemCompactImage: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
-  backgroundColor: '#F3F4F6',
-},
-
-menuItemCompactContent: {
-  flex: 1,
-},
-
-menuItemCompactHeader: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-},
-
-quantityControlsCompact: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 8,
-},
-
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  errorTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#EF4444',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  errorMessage: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: '#3cb378',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyMessage: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
 });
