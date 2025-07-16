@@ -75,17 +75,24 @@ export default function CardapioClienteScreen() {
 
   useEffect(() => {
     if (!restaurantId) return;
-    // Faça a requisição ao backend
-    fetch(`http://192.168.0.10:3000/restaurantes/${restaurantId}`) // use seu IP local em vez de localhost
-      .then((response) => response.json())
-      .then((data) => {
-        setMenuItems(data); // Atualiza os restaurantes com os dados da API
+    
+    const fetchMenuItems = async () => {
+      try {
         setLoading(false);
-      })
-      .catch((error) => {
+        // Por enquanto, vamos usar os dados de teste
+        // Quando você implementar o endpoint de itens, substitua por:
+        // const response = await Api.get(`/itens?estabelecimento=${restaurantId}`);
+        // setMenuItems(response.data);
+        
+        console.log('Carregando cardápio para restaurante:', restaurantId);
+        setMenuItems(menuItemsTeste);
+      } catch (error) {
         console.error('Erro ao buscar restaurantes:', error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchMenuItems();
   }, [restaurantId]);
 
 

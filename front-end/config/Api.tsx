@@ -2,7 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Api = axios.create({
-    baseURL: 'http://localhost:3000' // ou sua URL do backend
+    baseURL: 'http://192.168.0.10:3000' // IP local para desenvolvimento mobile
 });
 
 // Função para configurar o token automaticamente

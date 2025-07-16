@@ -6,14 +6,42 @@ const Helpers = require('../config/Helpers.js');
 const EstabelecimentoController = {
 
     listar: async (request, response) => {
-        const dados = await Estabelecimento.findAll();
-        return response.json(dados);
+        try {
+            const dados = await Estabelecimento.findAll({
+                attributes: ['id', 'nome', 'telefone', 'email', 'ativo'], // Não retornar dados sensíveis
+                where: {
+                    ativo: true // Apenas estabelecimentos ativos
+                }
+            });
+            return response.json(dados);
+        } catch (error) {
+            console.error('Erro ao listar estabelecimentos:', error);
+            return response.status(500).json({
+                message: 'Erro interno do servidor ao buscar estabelecimentos'
+            });
+        }
     },
 
     consultarPorID: async (request, response) => {
-        const id = request.params.id;
-        const dados = await Estabelecimento.findByPk(id);
-        return response.json(dados);
+        try {
+            const id = request.params.id;
+            const dados = await Estabelecimento.findByPk(id, {
+                attributes: ['id', 'nome', 'telefone', 'email', 'ativo'] // Não retornar dados sensíveis
+            });
+            
+            if (!dados) {
+                return response.status(404).json({
+                    message: 'Estabelecimento não encontrado'
+                });
+            }
+            
+            return response.json(dados);
+        } catch (error) {
+            console.error('Erro ao consultar estabelecimento:', error);
+            return response.status(500).json({
+                message: 'Erro interno do servidor ao buscar estabelecimento'
+            });
+        }
     },
 
     criar: async (request, response) => {

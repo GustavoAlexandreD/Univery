@@ -4,34 +4,61 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bike, Bookmark } from 'lucide-react-native';
 import { router, useLocalSearchParams  } from 'expo-router';
 import HeaderCliente from '@/components/HeaderCliente';
+import Api from '@/config/Api';
 
 const { width } = Dimensions.get('window');
 
+interface Restaurant {
+  id: string;
+  nome: string;
+  email?: string;
+  telefone?: string;
+  ativo?: boolean;
+  cnpj?: string;
+}
+
 export default function ClienteHomeScreen() {
-
-  const restaurants_teste = [
-    { id: '1', name: 'Ueceana', description: 'Marmitas por ótimos preços', tags: ['Marmitas', 'bebidas'] },
-    { id: '2', name: 'Billy', description: 'Vendo tapioca', tags: ['lanche', 'bebidas'] },
-    { id: '3', name: 'Gaiola', description: 'Salgados e marmitas', tags: ['Salgados', 'Marmitas', 'bebidas'] },
-    { id: '4', name: 'Tia do Dindin', description: 'Dindins gourmet', tags: ['doces'] },
-  ];
-
-  const [restaurants, setRestaurants] = useState(restaurants_teste)
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Faça a requisição ao backend
-    fetch('http://192.168.0.10:3000/restaurantes') // use seu IP local em vez de localhost
-      .then((response) => response.json())
-      .then((data) => {
-        setRestaurants(data); // Atualiza os restaurantes com os dados da API
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await Api.get('/estabelecimentos');
+        
+        if (response.data && Array.isArray(response.data)) {
+          // Filtrar apenas estabelecimentos ativos
+          const activeRestaurants = response.data.filter((restaurant: Restaurant) => 
+            restaurant.ativo !== false
+          );
+          setRestaurants(activeRestaurants);
+        } else {
+          setError('Formato de dados inválido recebido do servidor');
+        }
+      } catch (error: any) {
         console.error('Erro ao buscar restaurantes:', error);
+        
+        if (error.response) {
+          // Erro de resposta do servidor
+          setError(`Erro do servidor: ${error.response.status}`);
+        } else if (error.request) {
+          // Erro de rede
+          setError('Erro de conexão. Verifique sua internet e se o servidor está rodando.');
+        } else {
+          // Outro tipo de erro
+          setError('Erro inesperado ao carregar restaurantes');
+        }
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchRestaurants();
   }, []);
   
   const handleRestaurantSelect = (restaurantId: string) => {
@@ -44,13 +71,97 @@ export default function ClienteHomeScreen() {
         pathname: `/(cliente)/cardapio/cardapio-cliente`,
         params: {
           restaurantId: restaurant.id,
+          restaurantName: restaurant.nome,
         }
       });
     }
   };
 
+  const getRestaurantDescription = (restaurant: Restaurant) => {
+    // Gerar descrição baseada nos dados disponíveis
+    if (restaurant.email && restaurant.telefone) {
+      return 'Estabelecimento verificado';
+    } else if (restaurant.telefone) {
+      return 'Contato disponível';
+    }
+    return 'Estabelecimento cadastrado';
+  };
+
+  const getRestaurantTags = (restaurant: Restaurant) => {
+    // Gerar tags baseadas nos dados disponíveis
+    const tags = ['Comida'];
+    
+    if (restaurant.telefone) {
+      tags.push('Delivery');
+    }
+    if (restaurant.ativo) {
+      tags.push('Aberto');
+    }
+    
+    return tags;
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    // Recarregar a página executando o useEffect novamente
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await Api.get('/estabelecimentos');
+        
+        if (response.data && Array.isArray(response.data)) {
+          const activeRestaurants = response.data.filter((restaurant: Restaurant) => 
+            restaurant.ativo !== false
+          );
+          setRestaurants(activeRestaurants);
+        } else {
+          setError('Formato de dados inválido recebido do servidor');
+        }
+      } catch (error: any) {
+        console.error('Erro ao buscar restaurantes:', error);
+        
+        if (error.response) {
+          setError(`Erro do servidor: ${error.response.status}`);
+        } else if (error.request) {
+          setError('Erro de conexão. Verifique sua internet e se o servidor está rodando.');
+        } else {
+          setError('Erro inesperado ao carregar restaurantes');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  };
+
   if (loading) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <View style={styles.container}>
+        <HeaderCliente />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3cb378" />
+          <Text style={styles.loadingText}>Carregando restaurantes...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <HeaderCliente />
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Ops! Algo deu errado</Text>
+          <Text style={styles.errorMessage}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
+            <Text style={styles.retryButtonText}>Tentar Novamente</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -96,13 +207,13 @@ export default function ClienteHomeScreen() {
                   styles.restaurantName,
                   selectedRestaurant === restaurant.id && styles.selectedRestaurantName
                 ]}>
-                  {restaurant.name}
+                  {restaurant.nome}
                 </Text>
                 <Text style={styles.restaurantDescription}>
-                  {restaurant.description}
+                  {getRestaurantDescription(restaurant)}
                 </Text>
                 <View style={styles.tagContainer}>
-                  {restaurant.tags.map((tag, index) => (
+                  {getRestaurantTags(restaurant).map((tag, index) => (
                     <View key={index} style={styles.tagBox}>
                       <Text style={styles.tagText}>{tag}</Text>
                     </View>
@@ -117,6 +228,18 @@ export default function ClienteHomeScreen() {
               </View>
             </TouchableOpacity>
           ))}
+          
+          {restaurants.length === 0 && (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyTitle}>Nenhum restaurante encontrado</Text>
+              <Text style={styles.emptyMessage}>
+                Não há restaurantes disponíveis no momento. Tente novamente mais tarde.
+              </Text>
+              <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
+                <Text style={styles.retryButtonText}>Atualizar</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -255,5 +378,67 @@ const styles = StyleSheet.create({
   color: '#FFFFFF',
   fontSize: 10,
   fontWeight: '700',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  errorTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#EF4444',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  errorMessage: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: '#3cb378',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyMessage: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
   },
 });
