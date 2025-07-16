@@ -1,9 +1,9 @@
 const Estabelecimento = require("../model/Estabelecimento.js");
 const ErrorServices = require("../services/ErrorServices.js");
-const Estabelecimento = require("../services/EstabelecimentoServices.js");
+const EstabelecimentoServices = require("../services/EstabelecimentoServices.js");
 const Helpers = require('../config/Helpers.js');
 
-const Estabelecimento = {
+const EstabelecimentoController = {
 
     listar: async (request, response) => {
         const dados = await Estabelecimento.findAll();
@@ -21,7 +21,7 @@ const Estabelecimento = {
             const dados = request.body;
             dados.senha = Helpers.crypto(dados.senha);
 
-            await Estabelecimento.validandoEstabelecimento(dados);
+            await EstabelecimentoServices.validandoEstabelecimento(dados);
             await Estabelecimento.create(dados);
 
             return response.json({
@@ -86,4 +86,4 @@ const Estabelecimento = {
 
 };
 
-module.exports = Estabelecimento;
+module.exports = EstabelecimentoController;

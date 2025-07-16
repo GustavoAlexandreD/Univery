@@ -1,6 +1,6 @@
 const Cliente = require("../model/Cliente");
 const ErrorServices = require("../services/ErrorServices");
-const ClientesServices = require("../services/ClientesServices");
+const ClientesServices = require("../services/ClienteServices");
 const Helpers = require('../config/Helpers.js');
 
 const ClienteController = {

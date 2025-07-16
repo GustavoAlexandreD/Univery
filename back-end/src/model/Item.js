@@ -1,3 +1,6 @@
+const { DataTypes } = require('sequelize');
+const Conexao = require('../config/conexao.js');
+
 const Item = Conexao.define("Item", {
   id: { 
     type: DataTypes.INTEGER, 

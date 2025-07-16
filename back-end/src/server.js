@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+require('./model/associacoes');
 
 // Importar conexão com banco
 const Conexao = require('./config/conexao');
