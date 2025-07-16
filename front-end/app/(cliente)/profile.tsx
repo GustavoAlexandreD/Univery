@@ -1,14 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useUserStore } from '@/stores/userStore';
 
 import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
 import { router } from 'expo-router';
+
+// const user = [
+//     { id: '1', name: 'Cliente Univery', email: 'cliente@aluno.uece.br', tags: ['Marmitas', 'bebidas'] },
+// ];
+
 
 export default function ClienteProfileScreen() {
   const handleExit = () => {
     router.push('/index_dev')
   }
+  const user = useUserStore((state) => state.user);
 
   return (
     <View style={styles.container}>
@@ -20,8 +27,8 @@ export default function ClienteProfileScreen() {
           <View style={styles.avatarContainer}>
             <User size={48} color="#4ADE80" />
           </View>
-          <Text style={styles.userName}>Cliente UNIVERY</Text>
-          <Text style={styles.userEmail}>cliente@univery.edu.br</Text>
+          <Text style={styles.userName}>{user?.name ?? 'Nome não disponível'}</Text>
+          <Text style={styles.userEmail}>{user?.email ?? 'Email não disponível'}</Text>
         </View>
 
         <View style={styles.menuSection}>

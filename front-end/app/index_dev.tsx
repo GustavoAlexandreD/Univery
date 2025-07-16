@@ -11,13 +11,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ShoppingBag, Store, Bell } from 'lucide-react-native';
 import Header from '@/components/Header';
+import { useUserStore } from '@/stores/userStore';
 
 const { width } = Dimensions.get('window');
 
 export default function UserTypeSelection() {
   const handleClientePress = () => {
+    setUser({ name: 'Cliente', email: 'cliente@email.br' }); // Armazena as informações do usuário globalmente no momento do login
     router.push('/(cliente)');
   };
+  const { setUser } = useUserStore();
 
   const handleVendedorPress = () => {
     router.push('/(vendedor)');
