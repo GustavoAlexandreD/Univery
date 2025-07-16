@@ -10,11 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Store, Clock, MapPin, Phone, Mail, Settings, ChartBar as BarChart3, Package, DollarSign, Users } from 'lucide-react-native';
 import { router } from 'expo-router';
 
-const businessStats = [
-  { id: 'revenue', label: 'Receita Hoje (R$)', value: '245,00', icon: DollarSign, color: '#10B981' },
-  { id: 'orders', label: 'Pedidos Hoje', value: '18', icon: Package, color: '#3B82F6' },
-  { id: 'customers', label: 'Clientes Únicos', value: '12', icon: Users, color: '#F59E0B' },
-];
+const businessData = {
+  name: 'Lanchonete do Campus',
+  category: 'Alimentação • Lanches',
+  hours: 'Seg-Sex: 08:00 - 18:00',
+  location: 'Campus Universitário - Bloco Central',
+  phone: '(11) 99999-9999',
+  email: 'lanchonete@campus.edu.br',
+};
 
 export default function VendedorBusinessScreen() {
   const handleManageProducts = () => {
@@ -36,8 +39,8 @@ export default function VendedorBusinessScreen() {
               <Store size={32} color="#F59E0B" />
             </View>
             <View style={styles.businessInfo}>
-              <Text style={styles.businessName}>Lanchonete do Campus</Text>
-              <Text style={styles.businessCategory}>Alimentação • Lanches</Text>
+              <Text style={styles.businessName}>{businessData.name}</Text>
+              <Text style={styles.businessCategory}>{businessData.category}</Text>
             </View>
             <TouchableOpacity style={styles.editButton}>
               <Settings size={20} color="#6B7280" />
@@ -47,42 +50,22 @@ export default function VendedorBusinessScreen() {
           <View style={styles.businessDetails}>
             <View style={styles.detailRow}>
               <Clock size={16} color="#6B7280" />
-              <Text style={styles.detailText}>Seg-Sex: 08:00 - 18:00</Text>
+              <Text style={styles.detailText}>{businessData.hours}</Text>
             </View>
             <View style={styles.detailRow}>
               <MapPin size={16} color="#6B7280" />
-              <Text style={styles.detailText}>Campus Universitário - Bloco Central</Text>
+              <Text style={styles.detailText}>{businessData.location}</Text>
             </View>
             <View style={styles.detailRow}>
               <Phone size={16} color="#6B7280" />
-              <Text style={styles.detailText}>(11) 99999-9999</Text>
+              <Text style={styles.detailText}>{businessData.phone}</Text>
             </View>
             <View style={styles.detailRow}>
               <Mail size={16} color="#6B7280" />
-              <Text style={styles.detailText}>lanchonete@campus.edu.br</Text>
+              <Text style={styles.detailText}>{businessData.email}</Text>
             </View>
           </View>
         </View>
-
-        {/* Stats Section */}
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>ESTATÍSTICAS DE HOJE</Text>
-          <View style={styles.statsGrid}>
-            {businessStats.map((stat) => {
-              const IconComponent = stat.icon;
-              return (
-                <View key={stat.id} style={styles.statCard}>
-                  <View style={[styles.statIcon, { backgroundColor: `${stat.color}20` }]}>
-                    <IconComponent size={24} color={stat.color} />
-                  </View>
-                  <Text style={styles.statValue}>{stat.value}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-
         {/* Quick Actions */}
         <View style={styles.actionsSection}>
           <Text style={styles.sectionTitle}>AÇÕES RÁPIDAS</Text>

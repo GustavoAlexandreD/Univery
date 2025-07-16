@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderCliente from '@/components/HeaderCliente';
 
 import { ShoppingBag } from 'lucide-react-native';
 
 export default function ClienteOrdersScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>MEUS PEDIDOS</Text>
+      <HeaderCliente />
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>MEUS PEDIDOS</Text>
       </View>
       <View style={styles.content}>
         <View style={styles.emptyState}>
@@ -37,6 +39,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  sectionHeader:{
+    alignItems: 'center',
+  },
+  sectionTitle:{
+    paddingVertical: 20,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#24a637',
+    fontFamily: '',
+    letterSpacing: 1,
   },
   headerTitle: {
     fontSize: 20,

@@ -1,27 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUserStore } from '@/stores/userStore';
+import HeaderCliente from '@/components/HeaderCliente';
+
 
 import { User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
 import { router } from 'expo-router';
 
-// const user = [
-//     { id: '1', name: 'Cliente Univery', email: 'cliente@aluno.uece.br', tags: ['Marmitas', 'bebidas'] },
-// ];
-
-
 export default function ClienteProfileScreen() {
+  const { clearUser }  = useUserStore();
+  const user = useUserStore((state) => state.user);
+  
+  
   const handleExit = () => {
+    clearUser();
     router.push('/index_dev')
   }
-  const user = useUserStore((state) => state.user);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>PERFIL CLIENTE</Text>
-      </View>
+      <HeaderCliente />
+      
       <View style={styles.content}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
@@ -61,6 +60,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+    sectionHeader:{
+    alignItems: 'center',
+  },
+  sectionTitle:{
+    paddingVertical: 20,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#24a637',
+    fontFamily: '',
+    letterSpacing: 1,
   },
   headerTitle: {
     fontSize: 20,

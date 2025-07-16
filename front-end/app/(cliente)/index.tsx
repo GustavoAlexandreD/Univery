@@ -4,8 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bike, Bookmark } from 'lucide-react-native';
 import { router, useLocalSearchParams  } from 'expo-router';
 import HeaderCliente from '@/components/HeaderCliente';
-import { useUserStore } from '@/stores/userStore';
-console.log('useUserStore:', useUserStore);
+
 const { width } = Dimensions.get('window');
 
 export default function ClienteHomeScreen() {
@@ -22,11 +21,8 @@ export default function ClienteHomeScreen() {
   const [loading, setLoading] = useState(false);
 
 
-
-  const { setUser } = useUserStore();
-
   useEffect(() => {
-    setUser({ name: 'Cliente', email: 'clientet@email.br' });
+    
     // Faça a requisição ao backend
     fetch('http://192.168.0.10:3000/restaurantes') // use seu IP local em vez de localhost
       .then((response) => response.json())
@@ -67,7 +63,7 @@ export default function ClienteHomeScreen() {
       {/* Body */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Restaurantes</Text>
+          <Text style={styles.sectionTitle}>RESTAURANTES</Text>
         </View>
         
         <View style={styles.gridContainer}>

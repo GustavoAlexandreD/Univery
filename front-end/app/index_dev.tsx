@@ -16,11 +16,12 @@ import { useUserStore } from '@/stores/userStore';
 const { width } = Dimensions.get('window');
 
 export default function UserTypeSelection() {
+  const { setUser } = useUserStore();
+
   const handleClientePress = () => {
-    setUser({ name: 'Cliente', email: 'cliente@email.br' }); // Armazena as informações do usuário globalmente no momento do login
+    setUser({ name: 'Cliente', email: 'Cliente@email.br' }); // Armazena as informações do usuário globalmente no momento do login
     router.push('/(cliente)');
   };
-  const { setUser } = useUserStore();
 
   const handleVendedorPress = () => {
     router.push('/(vendedor)');
