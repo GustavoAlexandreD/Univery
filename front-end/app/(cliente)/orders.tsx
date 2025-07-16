@@ -149,9 +149,6 @@ export default function ClienteOrdersScreen() {
     return (
       <View style={styles.container}>
         <HeaderCliente />
-      <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>MEUS PEDIDOS</Text>
-        </View>
         <View style={styles.content}>
           <View style={styles.emptyState}>
             <ShoppingBag size={64} color="#E5E7EB" />
@@ -167,9 +164,7 @@ export default function ClienteOrdersScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>MEUS PEDIDOS</Text>
-      </View>
+      <HeaderCliente />
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.ordersContainer}>
           {orders.map(renderOrderCard)}
