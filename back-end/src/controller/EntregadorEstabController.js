@@ -1,6 +1,6 @@
 const EntregadorEstabelecimentoModel = require("../model/EntregadorEstabelecimento.js");
 const ErrorServices = require("../services/ErrorServices.js");
-const Entregador = require("../model/Entregador.js");
+const Cliente = require("../model/Cliente.js");
 const Estabelecimento = require("../model/Estabelecimento.js");
 
 const EntregadorEstabelecimentoController = {
@@ -9,8 +9,14 @@ const EntregadorEstabelecimentoController = {
         try {
             const dados = await EntregadorEstabelecimentoModel.findAll({
                 include: [
-                    { model: Entregador },
-                    { model: Estabelecimento }
+                    { 
+                        model: Cliente,
+                        as: 'cliente'
+                    },
+                    {
+                        model: Estabelecimento,
+                        as: 'estabelecimento'
+                    }
                 ]
             });
 
@@ -22,11 +28,11 @@ const EntregadorEstabelecimentoController = {
 
     consultarPorEntregador: async (request, response) => {
         try {
-            const id_entregador = request.params.id;
+            const id_cliente = request.params.id;
 
             const dados = await EntregadorEstabelecimentoModel.findAll({
-                where: { id_entregador },
-                include: [{ model: Estabelecimento }]
+                where: { id_cliente },
+                include: [{ model: Estabelecimento, as: 'estabelecimento' }]
             });
 
             return response.json(dados);
@@ -37,10 +43,10 @@ const EntregadorEstabelecimentoController = {
 
     criar: async (request, response) => {
         try {
-            const { id_entregador, id_estabelecimento, disponivel } = request.body;
+            const { id_cliente, id_estabelecimento, disponivel } = request.body;
 
             await EntregadorEstabelecimentoModel.create({
-                id_entregador,
+                id_cliente,
                 id_estabelecimento,
                 disponivel
             });
@@ -55,12 +61,12 @@ const EntregadorEstabelecimentoController = {
 
     atualizarDisponibilidade: async (request, response) => {
         try {
-            const { id_entregador, id_estabelecimento } = request.params;
+            const { id_cliente, id_estabelecimento } = request.params;
             const { disponivel } = request.body;
 
             await EntregadorEstabelecimentoModel.update(
                 { disponivel },
-                { where: { id_entregador, id_estabelecimento } }
+                { where: { id_cliente, id_estabelecimento } }
             );
 
             return response.json({
@@ -73,10 +79,10 @@ const EntregadorEstabelecimentoController = {
 
     deletar: async (request, response) => {
         try {
-            const { id_entregador, id_estabelecimento } = request.params;
+            const { id_cliente, id_estabelecimento } = request.params;
 
             await EntregadorEstabelecimentoModel.destroy({
-                where: { id_entregador, id_estabelecimento }
+                where: { id_cliente, id_estabelecimento }
             });
 
             return response.json({

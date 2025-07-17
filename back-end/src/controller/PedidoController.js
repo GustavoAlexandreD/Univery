@@ -11,11 +11,12 @@ const PedidoController = {
         try {
             const pedidos = await Pedido.findAll({
                 include: [
-                    { model: Cliente },
-                    { model: Estabelecimento },
+                    { model: Cliente, as: 'cliente' },
+                    { model: Estabelecimento, as: 'estabelecimento' },
                     {
                         model: Item,
-                        through: { attributes: [] }
+                        as: 'itens',
+                        through: { attributes: ['quantidade'] }
                     }
                 ]
             });
@@ -30,11 +31,12 @@ const PedidoController = {
             const id = request.params.id;
             const pedido = await Pedido.findByPk(id, {
                 include: [
-                    { model: Cliente },
-                    { model: Estabelecimento },
+                    { model: Cliente, as: 'cliente' },
+                    { model: Estabelecimento, as: 'estabelecimento' },
                     {
                         model: Item,
-                        through: { attributes: [] }
+                        as: 'itens',
+                        through: { attributes: ['quantidade'] }
                     }
                 ]
             });
@@ -51,38 +53,41 @@ const PedidoController = {
 
     criar: async (request, response) => {
         try {
-            const dados = request.body;
+            const { status, id_cliente, id_estabelecimento, itens } = request.body;
 
-            // 1. Buscar os itens e somar os preços
-            let precoTotal = 0;
-            if (dados.itens && Array.isArray(dados.itens)) {
-                const itens = await Item.findAll({
-                    where: { id: dados.itens }
-                });
-
-                if (itens.length !== dados.itens.length) {
-                    return response.status(400).json({ erro: "Um ou mais itens não encontrados." });
-                }
-
-                precoTotal = itens.reduce((soma, item) => soma + item.preco, 0);
+            if (!itens || !Array.isArray(itens) || itens.length === 0) {
+                return response.status(400).json({ erro: "É necessário fornecer uma lista de itens com quantidade." });
             }
 
-            // 2. Criar o pedido com o preço total
+            // Verifica se todos os itens existem
+            const itemIds = itens.map(i => i.id_item);
+            const itensExistentes = await Item.findAll({ where: { id: itemIds } });
+            if (itensExistentes.length !== itens.length) {
+                return response.status(400).json({ erro: "Um ou mais itens não encontrados." });
+            }
+
+            // Calcula o preço total (com base nos itens e suas quantidades)
+            let total = 0;
+            for (const item of itens) {
+                const itemInfo = itensExistentes.find(i => i.id === item.id_item);
+                total += itemInfo.preco * (item.quantidade || 1);
+            }
+
+            // Cria o pedido
             const novoPedido = await Pedido.create({
-                status: dados.status,
-                id_cliente: dados.id_cliente,
-                id_estabelecimento: dados.id_estabelecimento,
-                preco_total: precoTotal
+                status,
+                id_cliente,
+                id_estabelecimento,
+                total
             });
 
-            // 3. Relacionar os itens ao pedido
-            if (dados.itens && Array.isArray(dados.itens)) {
-                for (const id_item of dados.itens) {
-                    await ItemPedido.create({
-                        id_pedido: novoPedido.id,
-                        id_item: id_item
-                    });
-                }
+            // Cria os relacionamentos em ItemPedido
+            for (const item of itens) {
+                await ItemPedido.create({
+                    id_pedido: novoPedido.id,
+                    id_item: item.id_item,
+                    quantidade: item.quantidade || 1
+                });
             }
 
             return response.json({
@@ -147,7 +152,6 @@ const PedidoController = {
             return ErrorServices.validacaoErro("Erro ao atualizar status do pedido.", e, response);
         }
     }
-
 };
 
 module.exports = PedidoController;

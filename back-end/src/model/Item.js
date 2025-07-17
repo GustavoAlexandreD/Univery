@@ -22,13 +22,10 @@ const Item = Conexao.define("Item", {
   id_estabelecimento: { 
     type: DataTypes.INTEGER, 
     allowNull: false 
-  },
-  disponibilidade: {
-    type: DataTypes.ENUM('disponivel', 'esgotado'),
-    allowNull: false,
-    defaultValue: 'disponivel'
   }
 }, {
   tableName: "item",
   timestamps: false
 });
+
+module.exports = Item;

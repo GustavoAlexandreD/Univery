@@ -7,8 +7,7 @@ const Estabelecimento = Conexao.define("Estabelecimento", {
   cnpj: { type: DataTypes.STRING, allowNull: false, unique: true },
   telefone: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING },
-  senha: { type: DataTypes.STRING, allowNull: false },
-  ativo: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
+  senha: { type: DataTypes.STRING, allowNull: false }
 }, {
   tableName: "estabelecimento",
   timestamps: false
