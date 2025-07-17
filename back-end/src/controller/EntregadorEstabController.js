@@ -1,6 +1,6 @@
 const EntregadorEstabelecimentoModel = require("../model/EntregadorEstabelecimento.js");
 const ErrorServices = require("../services/ErrorServices.js");
-const Entregador = require("../model/Entregador.js");
+const Cliente = require("../model/Cliente.js");
 const Estabelecimento = require("../model/Estabelecimento.js");
 
 const EntregadorEstabelecimentoController = {
@@ -9,7 +9,7 @@ const EntregadorEstabelecimentoController = {
         try {
             const dados = await EntregadorEstabelecimentoModel.findAll({
                 include: [
-                    { model: Entregador },
+                    { model: Cliente },
                     { model: Estabelecimento }
                 ]
             });
