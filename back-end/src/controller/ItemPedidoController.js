@@ -9,8 +9,8 @@ const ItemPedidoController = {
         try {
             const dados = await ItemPedido.findAll({
                 include: [
-                    { model: Pedido },
-                    { model: Item }
+                    { model: Pedido, as: 'pedido' },
+                    { model: Item, as: 'item' }
                 ]
             });
 
@@ -26,7 +26,7 @@ const ItemPedidoController = {
 
             const itens = await ItemPedido.findAll({
                 where: { id_pedido },
-                include: [{ model: Item }]
+                include: [{ model: Item, as: 'item' }]
             });
 
             return response.json(itens);

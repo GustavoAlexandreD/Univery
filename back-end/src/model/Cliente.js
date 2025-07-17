@@ -36,15 +36,4 @@ const Cliente = Conexao.define("Cliente", {
   timestamps: false
 });
 
-// Um cliente faz vários pedidos
-Cliente.hasMany(Pedido, { foreignKey: "id_cliente" });
-
-// Se o cliente for um entregador, ele pode estar vinculado a vários estabelecimentos
-Cliente.belongsToMany(Estabelecimento, {
-  through: EntregadorEstabelecimento,
-  foreignKey: "id_entregador",
-  otherKey: "id_estabelecimento",
-  as: "estabelecimentos" // alias opcional
-});
-
 module.exports = Cliente;

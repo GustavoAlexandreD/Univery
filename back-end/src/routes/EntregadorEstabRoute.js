@@ -4,7 +4,7 @@ const EntregadorEstabController = require('../controller/EntregadorEstabControll
 const AutenticacaoMiddleware = require('../middleware/AutenticacaoMiddleware');
 
 // Todas as rotas são protegidas
-router.use(AutenticacaoMiddleware.verificarToken);
+//router.use(AutenticacaoMiddleware.verificarToken);
 
 // Listar todas as relações (admin)
 router.get('/', EntregadorEstabController.listar);

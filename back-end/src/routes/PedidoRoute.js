@@ -4,7 +4,7 @@ const PedidoController = require('../controller/PedidoController');
 const AutenticacaoMiddleware = require('../middleware/AutenticacaoMiddleware');
 
 // Todas as rotas de pedidos são protegidas
-router.use(AutenticacaoMiddleware.verificarToken);
+//router.use(AutenticacaoMiddleware.verificarToken);
 
 // Rotas acessíveis por clientes e estabelecimentos
 router.get('/', PedidoController.listar);

@@ -9,10 +9,9 @@ router.get('/:id', EstabelecimentoController.consultarPorID); // Ver restaurante
 router.post('/', EstabelecimentoController.criar); // Cadastro de restaurante
 
 // Rotas protegidas
-router.use(AutenticacaoMiddleware.verificarToken);
+//router.use(AutenticacaoMiddleware.verificarToken);
 
 router.put('/:id', EstabelecimentoController.atualizar);
 router.delete('/:id', EstabelecimentoController.deletar);
-router.patch('/:id/status', EstabelecimentoController.atualizarStatus);
 
 module.exports = router;

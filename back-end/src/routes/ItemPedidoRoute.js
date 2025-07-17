@@ -4,7 +4,7 @@ const ItemPedidoController = require('../controller/ItemPedidoController');
 const AutenticacaoMiddleware = require('../middleware/AutenticacaoMiddleware');
 
 // Todas as rotas são protegidas
-router.use(AutenticacaoMiddleware.verificarToken);
+//router.use(AutenticacaoMiddleware.verificarToken);
 
 // Listar todos os itens de pedidos (admin/estabelecimento)
 router.get('/', ItemPedidoController.listar);

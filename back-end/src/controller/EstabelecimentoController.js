@@ -8,10 +8,7 @@ const EstabelecimentoController = {
     listar: async (request, response) => {
         try {
             const dados = await Estabelecimento.findAll({
-                attributes: ['id', 'nome', 'telefone', 'email', 'ativo'], // Não retornar dados sensíveis
-                where: {
-                    ativo: true // Apenas estabelecimentos ativos
-                }
+                attributes: ['id', 'nome', 'telefone', 'email']
             });
             return response.json(dados);
         } catch (error) {
@@ -26,7 +23,7 @@ const EstabelecimentoController = {
         try {
             const id = request.params.id;
             const dados = await Estabelecimento.findByPk(id, {
-                attributes: ['id', 'nome', 'telefone', 'email', 'ativo'] // Não retornar dados sensíveis
+                attributes: ['id', 'nome', 'telefone', 'email']
             });
             
             if (!dados) {
@@ -62,56 +59,43 @@ const EstabelecimentoController = {
     },
 
     atualizar: async (request, response) => {
-        const id = request.params.id;
-        const dados = request.body;
+        try {
+            const id = request.params.id;
+            const dados = request.body;
 
-        if (dados.senha) {
-            dados.senha = Helpers.crypto(dados.senha);
+            if (dados.senha) {
+                dados.senha = Helpers.crypto(dados.senha);
+            }
+
+            await Estabelecimento.update(dados, {
+                where: { id }
+            });
+
+            return response.json({
+                message: "Estabelecimento atualizado com sucesso!"
+            });
+        } catch (e) {
+            return ErrorServices.validacaoErro("Erro ao atualizar Estabelecimento.", e, response);
         }
-
-        await Estabelecimento.update(dados, {
-            where: { id }
-        });
-
-        return response.json({
-            message: "Estabelecimento atualizado com sucesso!"
-        });
     },
 
     deletar: async (request, response) => {
-        const id = request.params.id;
-
-        await Estabelecimento.destroy({
-            where: { id }
-        });
-
-        return response.json({
-            message: "Estabelecimento deletado com sucesso!"
-        });
-    },
-
-    atualizarStatus: async (request, response) => {
         try {
             const id = request.params.id;
-            const { ativo } = request.body;
 
-            const estabelecimento = await Estabelecimento.findByPk(id);
-            if (!estabelecimento) {
-                return response.status(404).json({ erro: 'Estabelecimento não encontrado' });
-            }
-
-            estabelecimento.ativo = ativo;
-            await estabelecimento.save();
+            await Estabelecimento.destroy({
+                where: { id }
+            });
 
             return response.json({
-                message: "Status de funcionamento atualizado com sucesso!",
-                data: estabelecimento
+                message: "Estabelecimento deletado com sucesso!"
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao atualizar status do Estabelecimento.", e, response);
+            return ErrorServices.validacaoErro("Erro ao deletar Estabelecimento.", e, response);
         }
     }
 
+    // Removido atualizarStatus por não existir campo "ativo"
 };
 
 module.exports = EstabelecimentoController;

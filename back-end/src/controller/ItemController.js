@@ -10,9 +10,10 @@ const ItemController = {
         try {
             const itens = await Item.findAll({
                 include: [
-                    { model: Estabelecimento },
+                    { model: Estabelecimento, as: 'estabelecimento' },
                     {
                         model: Pedido,
+                        as: 'pedidos',
                         through: { attributes: [] }
                     }
                 ]
@@ -30,9 +31,10 @@ const ItemController = {
 
             const item = await Item.findByPk(id, {
                 include: [
-                    { model: Estabelecimento },
+                    { model: Estabelecimento, as: 'estabelecimento' },
                     {
                         model: Pedido,
+                        as: 'pedidos',
                         through: { attributes: [] }
                     }
                 ]
@@ -50,7 +52,7 @@ const ItemController = {
 
     criar: async (request, response) => {
         try {
-            const { nome, descricao, preco, id_estabelecimento, disponibilidade } = request.body;
+            const { nome, descricao, preco, id_estabelecimento} = request.body;
 
             if (!nome || !preco || !id_estabelecimento) {
                 return response.status(400).json({ erro: "Campos obrigatórios: nome, preco, id_estabelecimento" });
@@ -60,8 +62,7 @@ const ItemController = {
                 nome,
                 descricao,
                 preco,
-                id_estabelecimento,
-                disponibilidade: disponibilidade || 'disponivel'
+                id_estabelecimento
             });
 
             return response.json({
@@ -76,17 +77,19 @@ const ItemController = {
     atualizar: async (request, response) => {
         try {
             const id = request.params.id;
-            const { nome, descricao, preco, id_estabelecimento, disponibilidade } = request.body;
+            const { nome, descricao, preco, id_estabelecimento} = request.body;
 
             const item = await Item.findByPk(id);
             if (!item) {
                 return response.status(404).json({ erro: "Item não encontrado" });
             }
 
-            await Item.update(
-                { nome, descricao, preco, id_estabelecimento, disponibilidade },
-                { where: { id } }
-            );
+            item.nome = nome ?? item.nome;
+            item.descricao = descricao ?? item.descricao;
+            item.preco = preco ?? item.preco;
+            item.id_estabelecimento = id_estabelecimento ?? item.id_estabelecimento;
+
+            await item.save();
 
             return response.json({
                 message: "Item atualizado com sucesso!"
@@ -130,32 +133,6 @@ const ItemController = {
             });
         } catch (e) {
             return ErrorServices.validacaoErro("Erro ao atualizar preço.", e, response);
-        }
-    },
-
-    atualizarDisponibilidade: async (request, response) => {
-        try {
-            const id = request.params.id;
-            const { disponibilidade } = request.body;
-
-            if (!['disponivel', 'esgotado'].includes(disponibilidade)) {
-                return response.status(400).json({ erro: "Valor de disponibilidade inválido. Use 'disponivel' ou 'esgotado'." });
-            }
-
-            const item = await Item.findByPk(id);
-            if (!item) {
-                return response.status(404).json({ erro: "Item não encontrado" });
-            }
-
-            item.disponibilidade = disponibilidade;
-            await item.save();
-
-            return response.json({
-                message: "Disponibilidade atualizada com sucesso!",
-                data: item
-            });
-        } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao atualizar disponibilidade.", e, response);
         }
     }
 };

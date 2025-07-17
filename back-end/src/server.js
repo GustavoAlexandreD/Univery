@@ -19,9 +19,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares globais
-//app.use(cors());
-//app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Middleware de log das requisições
 app.use((req, res, next) => {
@@ -57,14 +57,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-// ==================== ROTA 404 ====================
-app.use('*', (req, res) => {
-    res.status(404).json({
-        message: 'Rota não encontrada',
-        path: req.originalUrl
-    });
-});
-
 // ==================== INICIALIZAÇÃO DO SERVIDOR ====================
 const iniciarServidor = async () => {
     try {
@@ -78,13 +70,6 @@ const iniciarServidor = async () => {
             console.log('✅ Modelos sincronizados com o banco de dados!');
         }
 
-        app._router.stack.forEach((layer) => {
-            if (layer.route && layer.route.path) {
-                console.log('➡️ ROTA REGISTRADA:', layer.route.path);
-            } else if (layer.name === 'router' && layer.regexp) {
-                console.log('🔎 ROTA REGEXP:', layer.regexp);
-            }
-        });
         
         // Iniciar servidor
         app.listen(PORT, () => {

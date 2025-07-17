@@ -15,6 +15,12 @@ const ClienteController = {
         return response.json(dados);
     },
 
+    consultarPorTipo: async (request, response) => {
+        const tipo = request.params.tipo;
+        const dados = await Cliente.findAll({ where: { tipo } });
+        return response.json(dados);
+    },
+
     criar: async (request, response) => {
         try {
             const dados = request.body;
@@ -28,7 +34,7 @@ const ClienteController = {
                 data: dados
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao cadastrar cliente.", e, res);
+            return ErrorServices.validacaoErro("Erro ao cadastrar cliente.", e, response);
         }
     },
 
@@ -44,40 +50,40 @@ const ClienteController = {
             where: { id }
         });
 
-        return res.json({
+        return response.json({
             message: "Cliente atualizado com sucesso!"
         });
     },
 
     deletar: async (request, response) => {
-        const id = req.params.id;
+        const id = request.params.id;
 
         await Cliente.destroy({ where: { id } });
 
-        return res.json({
+        return response.json({
             message: "Cliente deletado com sucesso!"
         });
     },
 
     atualizarEntregador: async (request, response) => {
         try {
-            const id = req.params.id;
-            const { entregador } = req.body;
+            const id = request.params.id;
+            const { tipo } = request.body; // tipo deve ser "Entregador" ou "Cliente"
 
             const cliente = await Cliente.findByPk(id);
             if (!cliente) {
-                return res.status(404).json({ erro: 'Cliente não encontrado' });
+                return response.status(404).json({ erro: 'Cliente não encontrado' });
             }
 
-            cliente.entregador = entregador;
+            cliente.tipo = tipo;
             await cliente.save();
 
-            return res.json({
-                message: "Status de entregador atualizado com sucesso!",
+            return response.json({
+                message: "Tipo de cliente atualizado com sucesso!",
                 data: cliente
             });
         } catch (e) {
-            return ErrorServices.validacaoErro("Erro ao atualizar entregador.", e, res);
+            return ErrorServices.validacaoErro("Erro ao atualizar tipo de cliente.", e, response);
         }
     }
 };
