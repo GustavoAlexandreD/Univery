@@ -12,106 +12,155 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ArrowLeft, X, Utensils } from 'lucide-react-native';
-
-
+import Api from '@/config/Api';
 
 export default function AddProdutoScreen() {
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [productPrice, setProductPrice] = useState('');
+  const [productCategory, setProductCategory] = useState('');
   const [showIconModal, setShowIconModal] = useState(false);
-    interface IconOption {
+  const [loading, setLoading] = useState(false);
+
+  // Simulando ID do estabelecimento logado - em produção viria do contexto de autenticação
+  const estabelecimentoId = "1";
+
+  interface IconOption {
     id: string;
     name: string;
     category: string;
     backgroundColor: string;
     component: React.ReactNode;
-    }
+  }
 
-    const iconOptions: IconOption[] = [
+  const iconOptions: IconOption[] = [
     {
-        id: 'ice-cream',
-        name: 'Sorvete',
-        category: 'Sobremesas',
-        backgroundColor: '#A7C7C7',
-        component: (
+      id: 'ice-cream',
+      name: 'Sorvete',
+      category: 'Sobremesas',
+      backgroundColor: '#A7C7C7',
+      component: (
         <View style={styles.iceCreamIcon}>
-            <View style={[styles.iceCreamScoop, { backgroundColor: '#FFB6C1' }]} />
-            <View style={[styles.iceCreamScoop, { backgroundColor: '#FFD700', marginTop: -8 }]} />
-            <View style={[styles.iceCreamScoop, { backgroundColor: '#98FB98', marginTop: -8 }]} />
-            <View style={styles.iceCreamCone} />
+          <View style={[styles.iceCreamScoop, { backgroundColor: '#FFB6C1' }]} />
+          <View style={[styles.iceCreamScoop, { backgroundColor: '#FFD700', marginTop: -8 }]} />
+          <View style={[styles.iceCreamScoop, { backgroundColor: '#98FB98', marginTop: -8 }]} />
+          <View style={styles.iceCreamCone} />
         </View>
-        )
+      )
     },
     {
-        id: 'juice',
-        name: 'Suco',
-        category: 'Bebidas',
-        backgroundColor: '#3cb378',
-        component: (
+      id: 'juice',
+      name: 'Suco',
+      category: 'Bebidas',
+      backgroundColor: '#3cb378',
+      component: (
         <View style={styles.juiceIcon}>
-            <View style={styles.juiceContainer}>
+          <View style={styles.juiceContainer}>
             <View style={styles.juiceTop} />
             <View style={styles.juiceBottom} />
-            </View>
-            <View style={styles.straw} />
+          </View>
+          <View style={styles.straw} />
         </View>
-        )
+      )
     },
     {
-        id: 'salad',
-        name: 'Salada',
-        category: 'Salgados',
-        backgroundColor: '#FFA500',
-        component: (
+      id: 'salad',
+      name: 'Salada',
+      category: 'Salgados',
+      backgroundColor: '#FFA500',
+      component: (
         <View style={styles.saladIcon}>
-            <View style={[styles.leafShape, { backgroundColor: '#228B22', transform: [{ rotate: '15deg' }] }]} />
-            <View style={[styles.leafShape, { backgroundColor: '#32CD32', transform: [{ rotate: '-15deg' }], marginTop: -12 }]} />
-            <View style={[styles.leafShape, { backgroundColor: '#90EE90', marginTop: -8 }]} />
+          <View style={[styles.leafShape, { backgroundColor: '#228B22', transform: [{ rotate: '15deg' }] }]} />
+          <View style={[styles.leafShape, { backgroundColor: '#32CD32', transform: [{ rotate: '-15deg' }], marginTop: -12 }]} />
+          <View style={[styles.leafShape, { backgroundColor: '#90EE90', marginTop: -8 }]} />
         </View>
-        )
+      )
     },
     {
-        id: 'utensils',
-        name: 'Prato',
-        category: 'Pratos',
-        backgroundColor: '#EF4444',
-        component: <Utensils size={32} color="#FFFFFF" />
+      id: 'utensils',
+      name: 'Prato',
+      category: 'Pratos',
+      backgroundColor: '#EF4444',
+      component: <Utensils size={32} color="#FFFFFF" />
     }
-    ];
+  ];
 
-    const [selectedIcon, setSelectedIcon] = useState<IconOption>(iconOptions[1]); // Default to juice
+  const [selectedIcon, setSelectedIcon] = useState<IconOption>(iconOptions[1]); // Default to juice
+
   const handleBack = () => {
     router.back();
   };
 
-  const handleSave = () => {
+  const validateForm = () => {
     if (!productName.trim()) {
       Alert.alert('Erro', 'Por favor, insira o nome do produto.');
-      return;
+      return false;
     }
     
     if (!productPrice.trim()) {
       Alert.alert('Erro', 'Por favor, insira o preço do produto.');
+      return false;
+    }
+
+    const price = parseFloat(productPrice.replace(',', '.'));
+    if (isNaN(price) || price <= 0) {
+      Alert.alert('Erro', 'Por favor, insira um preço válido.');
+      return false;
+    }
+
+    if (!productCategory.trim()) {
+      Alert.alert('Erro', 'Por favor, insira a categoria do produto.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSave = async () => {
+    if (!validateForm()) {
       return;
     }
 
-    // Create new product object
-    const newProduct = {
-      id: Date.now().toString(), // Simple ID generation
-      name: productName,
-      description: productDescription || 'Descrição...',
-      price: parseFloat(productPrice.replace(',', '.')),
-      image: 'https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&w=300', // Default image
-      category: 'Tapiocas', // Default category - in a real app, this would be selectable
-      icon: selectedIcon
-    };
+    try {
+      setLoading(true);
 
-    // Navigate back with the new product data
-    router.back();
-    
-    // Show success message
-    Alert.alert('Sucesso', 'Produto adicionado com sucesso!');
+      const newProduct = {
+        nome: productName.trim(),
+        descricao: productDescription.trim() || 'Descrição não informada',
+        preco: parseFloat(productPrice.replace(',', '.')),
+        id_estabelecimento: estabelecimentoId,
+        categoria: productCategory.trim(),
+        disponibilidade: 'disponivel'
+      };
+
+      const response = await Api.post('/itens', newProduct);
+
+      Alert.alert(
+        'Sucesso', 
+        'Produto adicionado com sucesso!',
+        [
+          {
+            text: 'OK',
+            onPress: () => router.back()
+          }
+        ]
+      );
+
+    } catch (error: any) {
+      console.error('Erro ao criar produto:', error);
+      
+      if (error.response?.status === 400) {
+        Alert.alert('Erro', 'Dados inválidos. Verifique as informações e tente novamente.');
+      } else if (error.response?.status === 401) {
+        Alert.alert('Erro', 'Você não tem permissão para adicionar produtos.');
+      } else if (error.response?.status === 422) {
+        Alert.alert('Erro', 'Dados duplicados ou inválidos.');
+      } else {
+        Alert.alert('Erro', 'Não foi possível adicionar o produto. Tente novamente.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleIconPress = () => {
@@ -126,6 +175,7 @@ export default function AddProdutoScreen() {
   const handleCloseModal = () => {
     setShowIconModal(false);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -133,65 +183,90 @@ export default function AddProdutoScreen() {
         <TouchableOpacity style={styles.backButton} onPress={handleBack}>
           <ArrowLeft size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        <View style={styles.headerCenter} />
+        <Text style={styles.headerTitle}>Adicionar Produto</Text>
         <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Product Icon */}
         <View style={styles.iconContainer}>
-          <TouchableOpacity style={[styles.iconBackground, { backgroundColor: selectedIcon.backgroundColor }]} onPress={handleIconPress}>
+          <TouchableOpacity 
+            style={[styles.iconBackground, { backgroundColor: selectedIcon.backgroundColor }]} 
+            onPress={handleIconPress}
+          >
             {selectedIcon.component}
           </TouchableOpacity>
+          <Text style={styles.iconHint}>Toque para escolher um ícone</Text>
         </View>
 
         {/* Product Name Input */}
         <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Nome do Produto *</Text>
           <TextInput
             style={styles.nameInput}
-            placeholder="Insira nome do produto."
+            placeholder="Ex: Hambúrguer Especial"
             placeholderTextColor="#9CA3AF"
             value={productName}
             onChangeText={setProductName}
+            maxLength={100}
+          />
+        </View>
+
+        {/* Product Category Input */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Categoria *</Text>
+          <TextInput
+            style={styles.categoryInput}
+            placeholder="Ex: Lanches, Bebidas, Sobremesas"
+            placeholderTextColor="#9CA3AF"
+            value={productCategory}
+            onChangeText={setProductCategory}
+            maxLength={50}
           />
         </View>
 
         {/* Product Description Input */}
         <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Descrição</Text>
           <TextInput
             style={styles.descriptionInput}
-            placeholder="Insira a descrição do produto"
+            placeholder="Descreva os ingredientes e características do produto"
             placeholderTextColor="#9CA3AF"
             value={productDescription}
             onChangeText={setProductDescription}
             multiline
             textAlignVertical="top"
+            maxLength={500}
           />
         </View>
 
-        {/* Spacer */}
-        <View style={styles.spacer} />
-
         {/* Price Input */}
         <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Preço *</Text>
           <TextInput
             style={styles.priceInput}
-            placeholder="Digite o preço do produto"
+            placeholder="0,00"
             placeholderTextColor='#3cb378'
             value={productPrice}
             onChangeText={setProductPrice}
-            keyboardType="numeric"
+            keyboardType="decimal-pad"
+            maxLength={10}
           />
         </View>
 
         {/* Save Button */}
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>Salvar</Text>
+        <TouchableOpacity 
+          style={[styles.saveButton, loading && styles.saveButtonDisabled]} 
+          onPress={handleSave}
+          disabled={loading}
+        >
+          <Text style={styles.saveButtonText}>
+            {loading ? 'Salvando...' : 'Salvar Produto'}
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.bottomSpacing} />
       </ScrollView>
-
 
       {/* Icon Selection Modal */}
       <Modal
@@ -203,7 +278,7 @@ export default function AddProdutoScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Adicione um ícone</Text>
+              <Text style={styles.modalTitle}>Escolha um ícone</Text>
               <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
                 <X size={24} color="#6B7280" />
               </TouchableOpacity>
@@ -257,8 +332,11 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
   },
-  headerCenter: {
-    flex: 1,
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 1,
   },
   headerSpacer: {
     width: 40,
@@ -276,6 +354,17 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  iconHint: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginTop: 8,
+    fontStyle: 'italic',
   },
   juiceIcon: {
     position: 'relative',
@@ -307,9 +396,24 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 20,
-    marginBottom: 16,
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
   },
   nameInput: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    color: '#1F2937',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  categoryInput: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
@@ -326,28 +430,34 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    height: 150,
-  },
-  spacer: {
-    height: 80,
+    height: 120,
   },
   priceInput: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    fontSize: 16,
+    fontSize: 18,
     color: '#3cb378',
     borderWidth: 2,
     borderColor: '#3cb378',
     fontWeight: '600',
+    textAlign: 'center',
   },
   saveButton: {
-    backgroundColor: '#9CA3AF',
+    backgroundColor: '#3cb378',
     marginHorizontal: 20,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 32,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  saveButtonDisabled: {
+    backgroundColor: '#9CA3AF',
   },
   saveButtonText: {
     fontSize: 18,
@@ -356,24 +466,6 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 100,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navIcon: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#D1D5DB',
-    borderRadius: 4,
   },
   modalOverlay: {
     flex: 1,
